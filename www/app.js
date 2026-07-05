@@ -73,6 +73,9 @@ document.getElementById("qibla").textContent =
 
                 const json = await res.json();
                 const t = json.data.timings;
+
+                checkPrayer(t);
+
                 const hijri = json.data.date.hijri;
 
 document.getElementById("hijri").textContent =
