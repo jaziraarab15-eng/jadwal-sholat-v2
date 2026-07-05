@@ -47,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const json = await res.json();
                 const t = json.data.timings;
 
+initNotifications();
+schedulePrayerNotifications(t);
+
 // aman dipanggil kalau ada plugin
 if (window.Capacitor) {
     console.log("Capacitor detected");
