@@ -1,11 +1,14 @@
-const { LocalNotifications } = window.Capacitor.Plugins;
-
 async function initNotifications() {
+
+    const { LocalNotifications } = window.Capacitor.Plugins;
+
     const perm = await LocalNotifications.requestPermissions();
     console.log("Permission:", perm);
 }
 
 async function schedulePrayerNotifications(t) {
+
+    const { LocalNotifications } = window.Capacitor.Plugins;
 
     const prayers = [
         { id: 1, name: "Subuh", time: t.Fajr },

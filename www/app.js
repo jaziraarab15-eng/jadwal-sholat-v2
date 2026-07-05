@@ -3,14 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const kota = document.getElementById("kota");
     const tanggal = document.getElementById("tanggal");
 
-    function initNotifications() {
-        console.log("notif ready");
-    }
-
-    function schedulePrayerNotifications(t) {
-        console.log("jadwal diterima", t);
-    }
-
     async function loadPrayerTimes() {
 
         if (!navigator.geolocation) {
@@ -48,16 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const t = json.data.timings;
 
 initNotifications();
-schedulePrayerNotifications(t);
-
-// aman dipanggil kalau ada plugin
-if (window.Capacitor) {
-    console.log("Capacitor detected");
-
-    if (window.Capacitor.Plugins?.LocalNotifications) {
-        console.log("LocalNotification ready");
-    }
-}
+schedulePrayerNotifications(t)
 
                 document.getElementById("fajr").textContent = t.Fajr;
                 document.getElementById("sunrise").textContent = t.Sunrise;
@@ -74,9 +57,6 @@ if (window.Capacitor) {
                 });
 
                 startCountdown(t);
-
-                initNotifications();
-                schedulePrayerNotifications(t);
 
             } catch (e) {
                 console.log(e);
