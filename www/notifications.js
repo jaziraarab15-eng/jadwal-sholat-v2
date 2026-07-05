@@ -18,6 +18,20 @@ async function initNotifications() {
     importance:5
 });
 
+   await LocalNotifications.schedule({
+    notifications: [
+        {
+            id: 999,
+            title: "🧪 Uji Adzan Subuh",
+            body: "Tes suara fajr_128_44",
+            schedule: {
+                at: new Date(Date.now() + 10000)
+            },
+            channelId: "subuh"
+        }
+    ]
+});
+
     console.log("Permission:", perm);
 }
 
