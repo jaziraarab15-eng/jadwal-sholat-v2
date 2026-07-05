@@ -3,6 +3,21 @@ async function initNotifications() {
     const { LocalNotifications } = window.Capacitor.Plugins;
 
     const perm = await LocalNotifications.requestPermissions();
+    
+    await LocalNotifications.createChannel({
+    id: "subuh",
+    name: "Subuh",
+    sound: "fajr_128_44",
+    importance: 5
+});
+
+   await LocalNotifications.createChannel({
+    id: "adzan",
+    name: "Adzan",
+    sound: "azan1",
+    importance:5
+});
+
     console.log("Permission:", perm);
 }
 
@@ -29,7 +44,7 @@ async function schedulePrayerNotifications(t) {
             title: "🕌 Waktu Salat",
             body: `Sudah masuk waktu ${p.name}`,
             schedule: { at: date },
-            sound: "default"
+            channelId: p.name === "Subuh" ? "subuh" : "adzan"
         };
     });
 
