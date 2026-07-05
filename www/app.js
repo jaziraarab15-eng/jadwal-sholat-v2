@@ -59,9 +59,10 @@ schedulePrayerNotifications(t)
                 startCountdown(t);
 
             } catch (e) {
-                console.log(e);
-                kota.textContent = "❌ Error load data";
-            }
+    console.log(e);
+    alert(e.message);
+    kota.textContent = "❌ Error load data";
+}
 
         }, (err) => {
             kota.textContent = "❌ GPS error: " + err.message;
