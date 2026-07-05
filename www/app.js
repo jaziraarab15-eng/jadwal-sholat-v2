@@ -100,10 +100,23 @@ schedulePrayerNotifications(t)
             document.getElementById("nextPrayer").textContent =
                 "🕌 " + next[0];
 
-            document.getElementById("countdown").textContent =
-                new Date(86400000 - (now % 86400000))
-                    .toISOString()
-                    .substr(11, 8);
+            const [h, m] = next[1].split(":").map(Number);
+
+const target = new Date();
+target.setHours(h, m, 0, 0);
+
+if (target < now) {
+    target.setDate(target.getDate() + 1);
+}
+
+const diff = target - now;
+
+const jam = Math.floor(diff / 3600000);
+const menit = Math.floor((diff % 3600000) / 60000);
+const detik = Math.floor((diff % 60000) / 1000);
+
+document.getElementById("countdown").textContent =
+    `${String(jam).padStart(2, "0")}:${String(menit).padStart(2, "0")}:${String(detik).padStart(2, "0")}`;
         }
 
         setInterval(tick, 1000);
