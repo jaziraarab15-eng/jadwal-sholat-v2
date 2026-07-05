@@ -141,5 +141,9 @@ document.getElementById("countdown").textContent =
         setInterval(tick, 1000);
     }
 
+window.addEventListener("deviceorientation", (event) => {
+    console.log("alpha (arah):", event.alpha);
+});
+
     loadPrayerTimes();
 });
