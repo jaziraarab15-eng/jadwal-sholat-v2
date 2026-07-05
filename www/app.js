@@ -48,6 +48,13 @@ notifToggle.addEventListener("change", () => {
 
                 const json = await res.json();
                 const t = json.data.timings;
+                const hijri = json.data.date.hijri;
+
+document.getElementById("hijri").textContent =
+    "🌙 " +
+    hijri.day + " " +
+    hijri.month.en + " " +
+    hijri.year + " H";
 
            if (notifToggle.checked) {
     initNotifications();
