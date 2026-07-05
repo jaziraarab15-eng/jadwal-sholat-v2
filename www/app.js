@@ -27,6 +27,31 @@ notifToggle.addEventListener("change", () => {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
 
+const kaabaLat = 21.4225;
+const kaabaLon = 39.8262;
+
+function toRad(v) {
+    return v * Math.PI / 180;
+}
+
+function toDeg(v) {
+    return v * 180 / Math.PI;
+}
+
+const dLon = toRad(kaabaLon - lon);
+const lat1 = toRad(lat);
+const lat2 = toRad(kaabaLat);
+
+const y = Math.sin(dLon) * Math.cos(lat2);
+const x = Math.cos(lat1) * Math.sin(lat2) -
+          Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+
+let brng = toDeg(Math.atan2(y, x));
+brng = (brng + 360) % 360;
+
+document.getElementById("qibla").textContent =
+    "🧭 Kiblat: " + Math.round(brng) + "° dari utara";
+
             try {
                 const geo = await fetch(
                     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
