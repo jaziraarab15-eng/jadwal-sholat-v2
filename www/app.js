@@ -1,53 +1,108 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+import { initNotifications, schedulePrayerNotifications } from "./notifications.js";
     const kota = document.getElementById("kota");
+    const tanggal = document.getElementById("tanggal");
 
-    if (!navigator.geolocation) {
-        kota.textContent = "❌ GPS tidak didukung";
-        return;
-    }
+    async function loadPrayerTimes() const t = json.data.timings;initNotifications();
+schedulePrayerNotifications(t); {
 
-    kota.textContent = "📍 Mencari lokasi...";
+        if (!navigator.geolocation) {
+            kota.textContent = "❌ GPS tidak didukung";
+            return;
+        }
 
-    navigator.geolocation.getCurrentPosition(
-        async (pos) => {
+        kota.textContent = "📍 Mencari lokasi...";
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
 
             try {
-                const res = await fetch(
+                const geo = await fetch(
                     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
                 );
 
-                const data = await res.json();
+                const data = await geo.json();
 
-                const nama =
+                const city =
                     data.address.city ||
                     data.address.town ||
                     data.address.village ||
-                    data.address.county ||
                     "Lokasi Anda";
 
-                kota.textContent = "📍 " + nama;
-            } catch (e) {
-                kota.textContent =
-                    `📍 ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-            }
-        },
-        (err) => {
-            kota.textContent = "❌ GPS: " + err.message;
-        },
-        {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
-        }
-    );
+                kota.textContent = "📍 " + city;
 
-    document.getElementById("tanggal").textContent =
-        new Date().toLocaleDateString("id-ID", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
+                const res = await fetch(
+                    `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`
+                );
+
+                const json = await res.json();
+                const t = json.data.timings;
+
+                document.getElementById("fajr").textContent = t.Fajr;
+                document.getElementById("sunrise").textContent = t.Sunrise;
+                document.getElementById("dhuhr").textContent = t.Dhuhr;
+                document.getElementById("asr").textContent = t.Asr;
+                document.getElementById("maghrib").textContent = t.Maghrib;
+                document.getElementById("isha").textContent = t.Isha;
+
+                tanggal.textContent = new Date().toLocaleDateString("id-ID", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+
+                startCountdown(t);
+
+            } catch (e) {
+                kota.textContent = "❌ Error load data";
+            }
+
+        }, (err) => {
+            kota.textContent = "❌ GPS error: " + err.message;
         });
+    }
+
+    function startCountdown(t) {
+
+        function tick() {
+            const now = new Date();
+
+            const list = [
+                ["Subuh", t.Fajr],
+                ["Zuhur", t.Dhuhr],
+                ["Asar", t.Asr],
+                ["Magrib", t.Maghrib],
+                ["Isya", t.Isha]
+            ];
+
+            let next = null;
+
+            for (const item of list) {
+                const [h, m] = item[1].split(":");
+                const d = new Date();
+                d.setHours(h, m, 0, 0);
+
+                if (d > now) {
+                    next = item;
+                    break;
+                }
+            }
+
+            if (!next) next = list[0];
+
+            document.getElementById("nextPrayer").textContent =
+                "🕌 " + next[0];
+
+            const diff = next.time ? next.time - now : 0;
+
+            document.getElementById("countdown").textContent =
+                new Date(Math.abs(diff)).toISOString().substr(11, 8);
+        }
+
+        setInterval(tick, 1000);
+    }
+
+    loadPrayerTimes();
 });
