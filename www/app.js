@@ -1,10 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-import { initNotifications, schedulePrayerNotifications } from "./notifications.js";
+
     const kota = document.getElementById("kota");
     const tanggal = document.getElementById("tanggal");
 
-    async function loadPrayerTimes() const t = json.data.timings;initNotifications();
-schedulePrayerNotifications(t); {
+    function initNotifications() {
+        console.log("notif ready");
+    }
+
+    function schedulePrayerNotifications(t) {
+        console.log("jadwal diterima", t);
+    }
+
+    async function loadPrayerTimes() {
 
         if (!navigator.geolocation) {
             kota.textContent = "❌ GPS tidak didukung";
@@ -14,6 +21,7 @@ schedulePrayerNotifications(t); {
         kota.textContent = "📍 Mencari lokasi...";
 
         navigator.geolocation.getCurrentPosition(async (pos) => {
+
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
 
@@ -39,6 +47,15 @@ schedulePrayerNotifications(t); {
                 const json = await res.json();
                 const t = json.data.timings;
 
+// aman dipanggil kalau ada plugin
+if (window.Capacitor) {
+    console.log("Capacitor detected");
+
+    if (window.Capacitor.Plugins?.LocalNotifications) {
+        console.log("LocalNotification ready");
+    }
+}
+
                 document.getElementById("fajr").textContent = t.Fajr;
                 document.getElementById("sunrise").textContent = t.Sunrise;
                 document.getElementById("dhuhr").textContent = t.Dhuhr;
@@ -55,7 +72,11 @@ schedulePrayerNotifications(t); {
 
                 startCountdown(t);
 
+                initNotifications();
+                schedulePrayerNotifications(t);
+
             } catch (e) {
+                console.log(e);
                 kota.textContent = "❌ Error load data";
             }
 
@@ -82,7 +103,7 @@ schedulePrayerNotifications(t); {
             for (const item of list) {
                 const [h, m] = item[1].split(":");
                 const d = new Date();
-                d.setHours(h, m, 0, 0);
+                d.setHours(Number(h), Number(m), 0, 0);
 
                 if (d > now) {
                     next = item;
@@ -95,10 +116,10 @@ schedulePrayerNotifications(t); {
             document.getElementById("nextPrayer").textContent =
                 "🕌 " + next[0];
 
-            const diff = next.time ? next.time - now : 0;
-
             document.getElementById("countdown").textContent =
-                new Date(Math.abs(diff)).toISOString().substr(11, 8);
+                new Date(86400000 - (now % 86400000))
+                    .toISOString()
+                    .substr(11, 8);
         }
 
         setInterval(tick, 1000);
