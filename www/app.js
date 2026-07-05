@@ -2,6 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const kota = document.getElementById("kota");
     const tanggal = document.getElementById("tanggal");
+    const notifToggle = document.getElementById("notifToggle");
+
+notifToggle.checked = localStorage.getItem("notif") !== "off";
+
+notifToggle.addEventListener("change", () => {
+    localStorage.setItem(
+        "notif",
+        notifToggle.checked ? "on" : "off"
+    );
+});
 
     async function loadPrayerTimes() {
 
@@ -39,8 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const json = await res.json();
                 const t = json.data.timings;
 
-initNotifications();
-schedulePrayerNotifications(t)
+           if (notifToggle.checked) {
+    initNotifications();
+    schedulePrayerNotifications(t);
+}
 
                 document.getElementById("fajr").textContent = t.Fajr;
                 document.getElementById("sunrise").textContent = t.Sunrise;
