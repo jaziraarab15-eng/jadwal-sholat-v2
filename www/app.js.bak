@@ -22,10 +22,96 @@ notifToggle.addEventListener("change", () => {
 
         kota.textContent = "📍 Mencari lokasi...";
 
-        navigator.geolocation.getCurrentPosition(async (pos) => {
+        navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+
+        console.log("GPS OK");
+
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        try {
+            const geo = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+            );
+
+            const data = await geo.json();
+
+            const city =
+                data.address.city ||
+                data.address.town ||
+                data.address.village ||
+                "Lokasi Anda";
+
+            kota.textContent = "📍 " + city;
+
+            const res = await fetch(
+                `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`
+            );
+
+            const json = await res.json();
+            const t = json.data.timings;
+
+            console.log("TIMINGS OK", t);
+
+            // lanjutkan fungsi kamu di sini
+            document.getElementById("fajr").textContent = t.Fajr;
+            document.getElementById("sunrise").textContent = t.Sunrise;
+            document.getElementById("dhuhr").textContent = t.Dhuhr;
+            document.getElementById("asr").textContent = t.Asr;
+            document.getElementById("maghrib").textContent = t.Maghrib;
+            document.getElementById("isha").textContent = t.Isha;
+
+            startCountdown(t);
+
+        } catch (e) {
+            console.log("ERROR FETCH:", e);
+            kota.textContent = "❌ Gagal ambil data";
+        }
+
+    },
+    (err) => {
+        console.log("GPS ERROR:", err);
+        kota.textContent = "❌ GPS tidak aktif / ditolak";
+    },
+    {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+    }
+);
 
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
+
+const kaabaLat = 21.4225;
+const kaabaLon = 39.8262;
+
+function toRad(v) {
+    return v * Math.PI / 180;
+}
+
+function toDeg(v) {
+    return v * 180 / Math.PI;
+}
+
+// arah kiblat
+const dLon = toRad(kaabaLon - lon);
+const lat1 = toRad(lat);
+const lat2 = toRad(kaabaLat);
+
+const y = Math.sin(dLon) * Math.cos(lat2);
+const x = Math.cos(lat1) * Math.sin(lat2) -
+          Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+
+let qibla = toDeg(Math.atan2(y, x));
+qibla = (qibla + 360) % 360;
+
+document.getElementById("qiblaAngle").textContent =
+    "Arah Kiblat: " + Math.round(qibla) + "°";
+
+// SIMPAN untuk kompas
+window.qiblaDirection = qibla;
 
 const kaabaLat = 21.4225;
 const kaabaLon = 39.8262;
@@ -73,6 +159,8 @@ document.getElementById("qibla").textContent =
 
                 const json = await res.json();
                 const t = json.data.timings;
+
+                checkPrayer(t);
 
                 const hijri = json.data.date.hijri;
 
@@ -169,6 +257,21 @@ document.getElementById("countdown").textContent =
 
 window.addEventListener("deviceorientation", (event) => {
     console.log("alpha (arah):", event.alpha);
+});
+
+window.addEventListener("deviceorientation", (event) => {
+
+    if (event.alpha == null) return;
+
+    const compass = document.getElementById("compass");
+
+    const heading = event.alpha; // arah HP
+
+    const qibla = window.qiblaDirection || 0;
+
+    const rotate = qibla - heading;
+
+    compass.style.transform = `rotate(${rotate}deg)`;
 });
 
     loadPrayerTimes();
