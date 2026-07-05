@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">-Jadwal Sholat</string>
+    <string name="title_activity_main">-Jadwal Sholat</string>
+    <string name="package_name">com.mujahidabuhasna.jadwalsholat</string>
+    <string name="custom_url_scheme">com.mujahidabuhasna.jadwalsholat</string>
+</resources>
