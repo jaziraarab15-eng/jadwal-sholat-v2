@@ -44,3 +44,36 @@ function updateBackground(){
 updateBackground();
 
 setInterval(updateBackground,60000);
+
+// ===== Night Elements =====
+
+function createNightEffect(){
+
+    if(document.getElementById("moon"))
+        return;
+
+
+    const moon = document.createElement("div");
+    moon.id="moon";
+    moon.innerHTML="🌙";
+
+    document.body.appendChild(moon);
+
+
+    const cloud = document.createElement("div");
+    cloud.id="cloud";
+    cloud.innerHTML="☁️";
+
+    document.body.appendChild(cloud);
+
+
+    const stars = document.createElement("div");
+    stars.id="stars";
+    stars.innerHTML="✨ ✨ ✨";
+
+    document.body.appendChild(stars);
+
+}
+
+
+createNightEffect();
