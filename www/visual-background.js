@@ -200,7 +200,7 @@ canvas.width,
 // ===== Siluet Masjid =====
 ctx.fillStyle = "#0b1020";
 
-const baseY = canvas.height;
+const baseY = canvas.height + 100;
 
 ctx.beginPath();
 
