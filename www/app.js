@@ -218,44 +218,70 @@ function calculateQibla(lat, lon) {
 const pages = document.querySelectorAll(".page");
 const navItems = document.querySelectorAll(".nav-item");
 
-function showPage(pageId, navId) {
+// ===== Navigation =====
 
-    pages.forEach(page => {
+document.addEventListener("DOMContentLoaded", () => {
+
+
+function showPage(pageId, navId){
+
+    document.querySelectorAll(".page").forEach(page=>{
         page.classList.remove("active");
     });
 
-    navItems.forEach(item => {
-        item.classList.remove("active");
+
+    document.querySelectorAll(".nav-item").forEach(nav=>{
+        nav.classList.remove("active");
     });
 
-    document.getElementById(pageId).classList.add("active");
-    document.getElementById(navId).classList.add("active");
+
+    const page = document.getElementById(pageId);
+    const nav = document.getElementById(navId);
+
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    if(nav){
+        nav.classList.add("active");
+    }
+
 }
 
-// Halaman Sholat
-document.getElementById("nav-home").addEventListener("click", () => {
-    showPage("page-home", "nav-home");
-});
 
-// Halaman Kiblat
-document.getElementById("nav-qibla").addEventListener("click", () => {
-    showPage("page-qibla", "nav-qibla");
+// Sholat
+document.getElementById("nav-home").onclick = () =>{
+    showPage("page-home","nav-home");
+};
 
-});
 
-// Halaman Jadwal Bulanan
-document.getElementById("nav-calendar").addEventListener("click", () => {
+// Kiblat
+document.getElementById("nav-qibla").onclick = () =>{
+    showPage("page-qibla","nav-qibla");
+};
 
+
+// Jadwal
+document.getElementById("nav-calendar").onclick = () =>{
     showPage("page-calendar","nav-calendar");
+};
+
+
+// Hijriah
+document.getElementById("nav-hijri").onclick = () =>{
+    showPage("page-hijri","nav-hijri");
+};
+
+
+// Lainnya
+document.getElementById("nav-more").onclick = () =>{
+    showPage("page-more","nav-more");
+};
+
 
 });
 
-// Tombol Hijriah
-document.getElementById("nav-hijri").addEventListener("click", () => {
-
-    showPage("page-hijri", "nav-hijri");
-
-});
 
 // ===== Jadwal Bulanan =====
 
@@ -264,7 +290,7 @@ async function loadMonthlySchedule(){
     const table = document.getElementById("monthlyBody");
 
     if(!table) return;
-
+97
 
     const now = new Date();
 
@@ -352,3 +378,4 @@ document.body.classList.toggle("dark");
 });
 
 }
+
