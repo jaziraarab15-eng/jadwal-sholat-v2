@@ -130,6 +130,8 @@ function mosqueLight(){
 
 mosqueLight();
 
+// ===== Premium Image Background =====
+
 function updateHeroBackground(){
 
     const hour = new Date().getHours();
@@ -137,21 +139,18 @@ function updateHeroBackground(){
     let image = "images/malam.jpg";
 
 
-    // Subuh
-    if(hour >= 5 && hour < 10){
+    if(hour >= 4 && hour < 10){
 
         image = "images/subuh.jpg";
 
     }
 
-    // Siang
     else if(hour >= 10 && hour < 16){
 
         image = "images/siang.jpg";
 
     }
 
-    // Sore
     else if(hour >= 16 && hour < 19){
 
         image = "images/sore.jpg";
@@ -159,23 +158,25 @@ function updateHeroBackground(){
     }
 
 
-    const hero = document.querySelector(".hero-bg");
-
-
-    if(hero){
-
-        hero.style.backgroundImage =
-        `
-        linear-gradient(
+    document.body.style.backgroundImage =
+    `
+    linear-gradient(
         rgba(0,0,0,.35),
         rgba(0,0,0,.65)
-        ),
-        url("${image}")
-        `;
+    ),
+    url("${image}")
+    `;
 
-    }
+
+    document.body.style.backgroundSize = "cover";
+
+    document.body.style.backgroundPosition = "center";
+
+    document.body.style.backgroundAttachment = "fixed";
 
 }
 
 
 updateHeroBackground();
+
+setInterval(updateHeroBackground,60000);
