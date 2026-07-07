@@ -77,3 +77,35 @@ function createNightEffect(){
 
 
 createNightEffect();
+
+// ===== Create Mosque Silhouette =====
+
+function createMosque(){
+
+    if(document.getElementById("mosque"))
+        return;
+
+
+    const mosque = document.createElement("div");
+
+    mosque.id="mosque";
+
+    mosque.innerHTML = `
+
+    <div class="dome"></div>
+
+    <div class="minaret left"></div>
+
+    <div class="minaret right"></div>
+
+    <div class="mosque-body"></div>
+
+    `;
+
+
+    document.body.appendChild(mosque);
+
+}
+
+
+createMosque();
