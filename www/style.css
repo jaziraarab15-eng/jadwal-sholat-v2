@@ -1,8 +1,16 @@
 body{
     margin:0;
     padding:20px;
+    padding-bottom:120px;
     font-family:Arial,sans-serif;
-    background:#f5f5f5;
+
+    min-height:100vh;
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    transition:background-image 2s ease;
 }
 
 .container{
@@ -74,11 +82,6 @@ span{
 .next-card h1 {
     font-size: 40px;
     margin: 10px 0;
-}
-
-body{
-    background: linear-gradient(180deg,#0f4c81,#2f80ed);
-    min-height:100vh;
 }
 
 .container{
@@ -166,68 +169,87 @@ label{
 }
 
 /* Jarak bawah supaya masjid tidak menabrak */
-body{
-    padding-bottom:120px;
-}
 
-/* ===== Bottom Navigation ===== */
+
+/* ===== Premium Bottom Navigation ===== */
 
 .bottom-nav{
     position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:70px;
+    left:12px;
+    right:12px;
+    bottom:12px;
 
-    background:#ffffffee;
-    backdrop-filter:blur(18px);
+    height:72px;
+
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
 
     display:flex;
     justify-content:space-around;
     align-items:center;
 
-    border-top:1px solid rgba(0,0,0,.08);
+    border-radius:25px;
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,.18);
+
+    border:1px solid rgba(255,255,255,.5);
 
     z-index:9999;
 }
 
-.nav-item{
 
+.nav-item{
     display:flex;
     flex-direction:column;
-
     align-items:center;
 
     color:#777;
 
-    font-size:13px;
+    font-size:12px;
 
     cursor:pointer;
 
-    transition:.3s;
+    transition:.35s;
 }
+
 
 .nav-item span{
+    font-size:25px;
+    margin-bottom:3px;
 
-    font-size:24px;
-
-    margin-bottom:4px;
-
+    transition:.35s;
 }
+
+
+.nav-item small{
+    font-weight:500;
+}
+
 
 .nav-item.active{
 
-    color:#1565C0;
+    color:#0d47a1;
 
-    transform:translateY(-4px);
-
-    font-weight:bold;
+    transform:translateY(-8px);
 
 }
 
-body{
 
-    padding-bottom:90px;
+.nav-item.active span{
+
+    transform:scale(1.25);
+
+    filter:
+    drop-shadow(0 0 8px rgba(13,71,161,.6));
+
+}
+
+
+.nav-item:active{
+
+    transform:scale(.9);
 
 }
 
@@ -350,14 +372,6 @@ color:white;
 }
 
 /* ===== Dynamic Background ===== */
-
-
-body{
-
-transition:background 2s ease;
-
-}
-
 
 /* Subuh */
 
@@ -593,6 +607,7 @@ pointer-events:none;
 
 
 /* badan masjid */
+
 
 .mosque-body{
 
