@@ -669,3 +669,70 @@ left:30%;
 right:30%;
 
 }
+
+/* ===== Mosque Night Light ===== */
+
+
+#mosque-light{
+
+position:absolute;
+
+bottom:30px;
+
+left:48%;
+
+width:50px;
+
+height:80px;
+
+background:#ffd54f;
+
+border-radius:50%;
+
+opacity:0;
+
+filter:blur(20px);
+
+animation:mosqueGlow 3s infinite;
+
+}
+
+
+/* cahaya hanya terlihat malam */
+
+body.night #mosque-light{
+
+opacity:.8;
+
+}
+
+
+@keyframes mosqueGlow{
+
+0%{
+
+transform:scale(.8);
+
+opacity:.4;
+
+}
+
+
+50%{
+
+transform:scale(1.2);
+
+opacity:.9;
+
+}
+
+
+100%{
+
+transform:scale(.8);
+
+opacity:.4;
+
+}
+
+}

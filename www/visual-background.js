@@ -109,3 +109,23 @@ function createMosque(){
 
 
 createMosque();
+
+// ===== Mosque Light Effect =====
+
+function mosqueLight(){
+
+    const mosque = document.getElementById("mosque");
+
+    if(!mosque) return;
+
+
+    const light = document.createElement("div");
+
+    light.id = "mosque-light";
+
+    mosque.appendChild(light);
+
+}
+
+
+mosqueLight();
