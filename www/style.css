@@ -348,3 +348,90 @@ background:#1e1e1e;
 color:white;
 
 }
+
+/* ===== Dynamic Background ===== */
+
+
+body{
+
+transition:background 2s ease;
+
+}
+
+
+/* Subuh */
+
+body.morning{
+
+background:
+linear-gradient(
+#89cff0,
+#f8d49d
+);
+
+}
+
+
+/* Siang */
+
+body.day{
+
+background:
+linear-gradient(
+#4facfe,
+#ffffff
+);
+
+}
+
+
+/* Sunset */
+
+body.sunset{
+
+background:
+linear-gradient(
+#ff9966,
+#ff5e62
+);
+
+}
+
+
+/* Malam */
+
+body.night{
+
+background:
+linear-gradient(
+#020024,
+#090979,
+#000000
+);
+
+}
+
+
+/* Siluet Masjid */
+
+body::after{
+
+content:"🕌";
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+right:0;
+
+font-size:120px;
+
+text-align:center;
+
+opacity:.25;
+
+pointer-events:none;
+
+}
