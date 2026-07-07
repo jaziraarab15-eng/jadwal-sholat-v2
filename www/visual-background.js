@@ -197,6 +197,36 @@ canvas.width,
 300
 );
 
+// ===== Siluet Masjid =====
+ctx.fillStyle = "#0b1020";
+
+const baseY = canvas.height;
+
+ctx.beginPath();
+
+// Tanah
+ctx.rect(0, baseY - 70, canvas.width, 70);
+
+// Kubah utama
+ctx.moveTo(canvas.width * 0.50, baseY - 170);
+ctx.arc(canvas.width * 0.50, baseY - 120, 50, Math.PI, 0);
+
+// Bangunan utama
+ctx.rect(canvas.width * 0.42, baseY - 120, canvas.width * 0.16, 70);
+
+// Menara kiri
+ctx.rect(canvas.width * 0.28, baseY - 180, 24, 110);
+ctx.moveTo(canvas.width * 0.292, baseY - 180);
+ctx.lineTo(canvas.width * 0.304, baseY - 205);
+ctx.lineTo(canvas.width * 0.316, baseY - 180);
+
+// Menara kanan
+ctx.rect(canvas.width * 0.70, baseY - 180, 24, 110);
+ctx.moveTo(canvas.width * 0.712, baseY - 180);
+ctx.lineTo(canvas.width * 0.724, baseY - 205);
+ctx.lineTo(canvas.width * 0.736, baseY - 180);
+
+ctx.fill();
 
 requestAnimationFrame(draw);
 
