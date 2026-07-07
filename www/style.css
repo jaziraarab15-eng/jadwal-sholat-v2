@@ -252,3 +252,41 @@ body{
         transform:translateY(0);
     }
 }
+
+/* ===== Monthly Table ===== */
+
+.monthly-table{
+
+width:100%;
+
+border-collapse:collapse;
+
+font-size:14px;
+
+}
+
+.monthly-table th{
+
+background:#1565C0;
+
+color:white;
+
+padding:10px;
+
+}
+
+.monthly-table td{
+
+padding:10px;
+
+text-align:center;
+
+border-bottom:1px solid #ddd;
+
+}
+
+.monthly-table tr:nth-child(even){
+
+background:#f7f7f7;
+
+}

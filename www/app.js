@@ -240,4 +240,12 @@ document.getElementById("nav-home").addEventListener("click", () => {
 // Halaman Kiblat
 document.getElementById("nav-qibla").addEventListener("click", () => {
     showPage("page-qibla", "nav-qibla");
+
+});
+
+// Halaman Jadwal Bulanan
+document.getElementById("nav-calendar").addEventListener("click", () => {
+
+    showPage("page-calendar","nav-calendar");
+
 });
