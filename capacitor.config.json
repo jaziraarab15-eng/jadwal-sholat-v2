@@ -1,5 +1,15 @@
 {
   "appId": "com.mujahidabuhasna.jadwalsholat",
   "appName": "-Jadwal Sholat",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "BackgroundRunner": {
+      "label": "com.mujahidabuhasna.jadwalsholat.background",
+      "src": "runners/background.js",
+      "event": "checkPrayer",
+      "repeat": true,
+      "interval": 15,
+      "autoStart": true
+    }
+  }
 }

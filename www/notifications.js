@@ -39,6 +39,10 @@ async function schedulePrayerNotifications(t) {
         const date = new Date();
         date.setHours(hour, minute, 0, 0);
 
+if (date < new Date()) {
+    date.setDate(date.getDate() + 1);
+}
+
         return {
             id: p.id,
             title: "🕌 Waktu Salat",

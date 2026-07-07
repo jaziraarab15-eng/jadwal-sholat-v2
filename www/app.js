@@ -1,3 +1,5 @@
+const { BackgroundRunner } = window.Capacitor.Plugins;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const kota = document.getElementById("kota");
@@ -26,6 +28,10 @@ notifToggle.addEventListener("change", () => {
 
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
+
+const qibla = calculateQibla(lat, lon);
+document.getElementById("qibla").textContent =
+    "Arah Kiblat: " + Math.round(qibla) + "°";
 
 const kaabaLat = 21.4225;
 const kaabaLon = 39.8262;
@@ -167,9 +173,42 @@ document.getElementById("countdown").textContent =
         setInterval(tick, 1000);
     }
 
+let qiblaDirection = 0;
+
 window.addEventListener("deviceorientation", (event) => {
-    console.log("alpha (arah):", event.alpha);
+    if (event.alpha == null) return;
+
+    const compass = document.getElementById("compass");
+    if (!compass) return;
+
+    // arah HP
+    const heading = event.alpha;
+
+    // panah kiblat = arah Ka'bah - arah HP
+    const rotation = qiblaDirection - heading;
+
+    compass.style.transform = `rotate(${rotation}deg)`;
 });
+
+qiblaDirection = qibla;
+
+function calculateQibla(lat, lon) {
+    const kaabaLat = 21.4225;
+    const kaabaLon = 39.8262;
+
+    const toRad = (deg) => deg * (Math.PI / 180);
+    const toDeg = (rad) => rad * (180 / Math.PI);
+
+    const dLon = toRad(kaabaLon - lon);
+    const lat1 = toRad(lat);
+    const lat2 = toRad(kaabaLat);
+
+    const y = Math.sin(dLon);
+    const x = Math.cos(lat1) * Math.tan(lat2) - Math.sin(lat1) * Math.cos(dLon);
+
+    let brng = toDeg(Math.atan2(y, x));
+    return (brng + 360) % 360;
+}
 
     loadPrayerTimes();
 });
