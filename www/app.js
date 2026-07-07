@@ -336,3 +336,19 @@ async function loadMonthlySchedule(){
 
 
 loadMonthlySchedule();
+
+// ===== Dark Mode =====
+
+const darkBtn = document.getElementById("darkModeBtn");
+
+
+if(darkBtn){
+
+darkBtn.addEventListener("click",()=>{
+
+document.body.classList.toggle("dark");
+
+
+});
+
+}
