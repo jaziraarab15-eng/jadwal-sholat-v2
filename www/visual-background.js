@@ -3,6 +3,35 @@
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 
+let currentTop = "#071d49";
+let currentBottom = "#243b55";
+
+function hexToRgb(hex){
+    const n = parseInt(hex.slice(1),16);
+    return {
+        r:(n>>16)&255,
+        g:(n>>8)&255,
+        b:n&255
+    };
+}
+
+function lerp(a,b,t){
+    return a+(b-a)*t;
+}
+
+function blendColor(from,to,speed=0.02){
+    const a=hexToRgb(from);
+    const b=hexToRgb(to);
+
+    return `rgb(${
+        Math.round(lerp(a.r,b.r,speed))
+    },${
+        Math.round(lerp(a.g,b.g,speed))
+    },${
+        Math.round(lerp(a.b,b.b,speed))
+    })`;
+}
+
 canvas.style.position = "fixed";
 canvas.style.inset = "0";
 canvas.style.zIndex = "-1";
@@ -69,17 +98,15 @@ move:0
 
 function draw(){
 
-let colors=sky();
+let target = sky();
 
-let g=ctx.createLinearGradient(
-0,0,0,canvas.height
-);
+currentTop = blendColor(currentTop, target[0], 0.02);
+currentBottom = blendColor(currentBottom, target[1], 0.02);
 
-g.addColorStop(0,colors[0]);
-g.addColorStop(1,colors[1]);
+let g = ctx.createLinearGradient(0,0,0,canvas.height);
 
-ctx.fillStyle=g;
-ctx.fillRect(0,0,canvas.width,canvas.height);
+g.addColorStop(0, currentTop);
+g.addColorStop(1, currentBottom);
 
 
 // bulan malam
