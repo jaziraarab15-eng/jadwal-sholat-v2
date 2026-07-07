@@ -249,3 +249,90 @@ document.getElementById("nav-calendar").addEventListener("click", () => {
     showPage("page-calendar","nav-calendar");
 
 });
+
+// Tombol Hijriah
+document.getElementById("nav-hijri").addEventListener("click", () => {
+
+    showPage("page-hijri", "nav-hijri");
+
+});
+
+// ===== Jadwal Bulanan =====
+
+async function loadMonthlySchedule(){
+
+    const table = document.getElementById("monthlyBody");
+
+    if(!table) return;
+
+
+    const now = new Date();
+
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+
+
+    // Contoh koordinat Rancaekek
+    const latitude = -6.98;
+    const longitude = 107.75;
+
+
+    const url =
+    `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${latitude}&longitude=${longitude}&method=20`;
+
+
+    try{
+
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+
+        table.innerHTML="";
+
+
+        data.data.forEach(day=>{
+
+
+            const t = day.timings;
+
+
+            const row = document.createElement("tr");
+
+
+            row.innerHTML = `
+
+            <td>${day.date.gregorian.day}</td>
+
+            <td>${t.Fajr.substring(0,5)}</td>
+
+            <td>${t.Dhuhr.substring(0,5)}</td>
+
+            <td>${t.Asr.substring(0,5)}</td>
+
+            <td>${t.Maghrib.substring(0,5)}</td>
+
+            <td>${t.Isha.substring(0,5)}</td>
+
+            `;
+
+
+            table.appendChild(row);
+
+
+        });
+
+
+    }catch(e){
+
+        table.innerHTML =
+        "<tr><td colspan='6'>Gagal memuat jadwal</td></tr>";
+
+        console.log(e);
+
+    }
+
+}
+
+
+loadMonthlySchedule();
