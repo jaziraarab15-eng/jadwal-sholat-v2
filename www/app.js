@@ -212,3 +212,32 @@ function calculateQibla(lat, lon) {
 
     loadPrayerTimes();
 });
+
+// ===== Multi Page Navigation =====
+
+const pages = document.querySelectorAll(".page");
+const navItems = document.querySelectorAll(".nav-item");
+
+function showPage(pageId, navId) {
+
+    pages.forEach(page => {
+        page.classList.remove("active");
+    });
+
+    navItems.forEach(item => {
+        item.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+    document.getElementById(navId).classList.add("active");
+}
+
+// Halaman Sholat
+document.getElementById("nav-home").addEventListener("click", () => {
+    showPage("page-home", "nav-home");
+});
+
+// Halaman Kiblat
+document.getElementById("nav-qibla").addEventListener("click", () => {
+    showPage("page-qibla", "nav-qibla");
+});
