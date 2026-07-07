@@ -736,3 +736,284 @@ opacity:.4;
 }
 
 }
+
+/* ===== HEADER ===== */
+
+.hero{
+    height:220px;
+    border-radius:0 0 30px 30px;
+    overflow:hidden;
+    position:relative;
+    background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.55)),
+               url("img/mosque.jpg");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:20px;
+    padding:20px;
+    color:white;
+}
+
+.hero h1{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.hero h2{
+    font-size:22px;
+}
+
+.hero p{
+    opacity:.95;
+    margin-top:4px;
+}
+
+/* ===== CARD SALAT BERIKUTNYA ===== */
+
+.next-prayer-card{
+
+    background:white;
+
+    margin:-35px 18px 15px;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+
+}
+
+.next-prayer-card h1{
+
+    color:#10b981;
+
+    font-size:40px;
+
+}
+
+.next-prayer-card h2{
+
+    margin:8px 0;
+
+}
+
+/* ===== PILIHAN SUARA ===== */
+
+.sound-card{
+
+display:flex;
+
+gap:10px;
+
+padding:0 18px 15px;
+
+}
+
+.sound-card button{
+
+flex:1;
+
+padding:10px;
+
+border:none;
+
+border-radius:12px;
+
+background:#eef6f4;
+
+}
+
+/* ===== DAFTAR SHOLAT ===== */
+
+.prayer-card{
+
+margin:0 18px 25px;
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+box-shadow:0 6px 20px rgba(0,0,0,.08);
+
+}
+
+.prayer-row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:16px 18px;
+
+border-bottom:1px solid #eee;
+
+font-size:17px;
+
+}
+
+.active-prayer{
+
+background:#10b981;
+
+color:white;
+
+font-weight:bold;
+
+}
+
+/* ===== Hero Premium ===== */
+
+.hero{
+
+    position:relative;
+
+    height:240px;
+
+    overflow:hidden;
+
+    border-radius:0 0 30px 30px;
+
+    background:linear-gradient(#6ec6ff,#1b5e20);
+
+}
+
+.hero-bg{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:0;
+
+    bottom:0;
+
+    opacity:.25;
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    left:20px;
+
+    right:20px;
+
+    bottom:25px;
+
+    color:white;
+
+}
+
+.hero h1{
+
+    font-size:30px;
+
+    margin-bottom:10px;
+
+}
+
+.hero h2{
+
+    font-size:22px;
+
+    margin-bottom:5px;
+
+}
+
+.hero p{
+
+    margin:2px 0;
+
+    font-size:15px;
+
+}
+
+.next-prayer-card{
+
+    background:rgba(255,255,255,.95);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:20px;
+
+    margin:-40px 18px 20px;
+
+    padding:20px;
+
+}
+
+.prayer-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    margin:20px 18px;
+
+    overflow:hidden;
+
+}
+
+.prayer-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:16px 18px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.prayer-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.prayer-header{
+height:220px;
+background-size:cover;
+background-position:center;
+border-radius:25px;
+padding:25px;
+color:white;
+overflow:hidden;
+position:relative;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.prayer-header:before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(
+rgba(0,0,0,.2),
+rgba(0,0,0,.75)
+);
+}
+
+.prayer-header>*{
+position:relative;
+z-index:2;
+}
+
+.prayer-title{
+font-size:32px;
+}

@@ -100,6 +100,8 @@ document.getElementById("hijri").textContent =
                 document.getElementById("maghrib").textContent = t.Maghrib;
                 document.getElementById("isha").textContent = t.Isha;
 
+                updatePrayerHighlight(t);
+
                 tanggal.textContent = new Date().toLocaleDateString("id-ID", {
                     weekday: "long",
                     day: "numeric",
@@ -379,3 +381,70 @@ document.body.classList.toggle("dark");
 
 }
 
+// ===== Highlight Waktu Sholat Aktif =====
+
+function updatePrayerHighlight(times) {
+
+    document.querySelectorAll(".prayer-row").forEach(row => {
+        row.classList.remove("active-prayer");
+    });
+
+    const schedule = [
+        { id: "fajr", time: times.Fajr },
+        { id: "sunrise", time: times.Sunrise },
+        { id: "dhuhr", time: times.Dhuhr },
+        { id: "asr", time: times.Asr },
+        { id: "maghrib", time: times.Maghrib },
+        { id: "isha", time: times.Isha }
+    ];
+
+    const now = new Date();
+    const current = now.getHours() * 60 + now.getMinutes();
+
+    let activeIndex = 0;
+
+    schedule.forEach((p, i) => {
+
+        const t = p.time.split(":");
+
+        const minute = parseInt(t[0]) * 60 + parseInt(t[1]);
+
+        if (current >= minute) {
+            activeIndex = i;
+        }
+
+    });
+
+    document.getElementById(schedule[activeIndex].id)
+        .parentElement
+        .classList.add("active-prayer");
+
+}
+
+function updatePrayerBackground(){
+
+let hour = new Date().getHours();
+
+let img="malam.jpg";
+
+if(hour>=4 && hour<10){
+img="subuh.jpg";
+}
+else if(hour>=10 && hour<15){
+img="siang.jpg";
+}
+else if(hour>=15 && hour<18){
+img="sore.jpg";
+}
+
+let header=document.getElementById("prayerHeader");
+
+if(header){
+header.style.backgroundImage=
+`url(images/${img})`;
+}
+
+}
+
+updatePrayerBackground();
+setInterval(updatePrayerBackground,60000);

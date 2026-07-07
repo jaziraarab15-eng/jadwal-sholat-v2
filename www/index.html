@@ -12,13 +12,33 @@
 
 <div class="container">
 
-  <h1>🕌 Jadwal Sholat</h1>
+<div class="prayer-header" id="prayerHeader">
 
-  <h2 id="kota">Memuat lokasi...</h2>
-  <p id="tanggal">Memuat tanggal...</p>
-<p id="hijri">🌙 Memuat tanggal Hijriah...</p>
+<h1 class="prayer-title">
+🕌 Jadwal Sholat
+</h1>
+
+<h2 id="kota">
+Memuat lokasi...
+</h2>
+
+<p id="tanggal">
+Memuat tanggal...
+</p>
+
+<p id="hijri">
+🌙 Memuat tanggal Hijriah...
+</p>
+
+</div>
+
+    </div>
+
+</div>
+
 
 <div class="card">
+
   <h3>🧭 Arah Kiblat</h3>
 
 <div id="compass" style="font-size:80px;text-align:center;transition:transform .2s;">
@@ -28,24 +48,60 @@
   <p id="qibla">Menghitung...</p>
 </div>
 
-  <div class="next-card">
-    <h3 id="nextPrayer">Salat Berikutnya</h3>
+  <div class="next-prayer-card">
+
+    <small>Salat Berikutnya</small>
+
+    <h2 id="nextPrayer">Subuh</h2>
+
     <h1 id="countdown">00:00:00</h1>
 
-    <label>
-      <input type="checkbox" id="notifToggle" checked>
-      🔔 Aktifkan Notifikasi
-    </label>
-  </div>
+    <div class="notify-box">
 
-  <div class="card">
-    <p>🌅 Subuh <span id="fajr">--:--</span></p>
-    <p>🌄 Syuruq <span id="sunrise">--:--</span></p>
-    <p>☀️ Zuhur <span id="dhuhr">--:--</span></p>
-    <p>🌇 Asar <span id="asr">--:--</span></p>
-    <p>🌆 Magrib <span id="maghrib">--:--</span></p>
-    <p>🌙 Isya <span id="isha">--:--</span></p>
-  </div>
+        <label>
+
+            <input type="checkbox" id="notifToggle" checked>
+
+            🔔 Notifikasi Aktif
+
+        </label>
+
+    </div>
+
+</div>
+
+  <div class="prayer-card">
+
+    <div class="prayer-row">
+        <span>🌅 Subuh</span>
+        <span id="fajr">--:--</span>
+    </div>
+
+    <div class="prayer-row">
+        <span>🌄 Syuruq</span>
+        <span id="sunrise">--:--</span>
+    </div>
+
+    <div class="prayer-row">
+        <span>☀️ Zuhur</span>
+        <span id="dhuhr">--:--</span>
+    </div>
+
+    <div class="prayer-row">
+        <span>🌇 Asar</span>
+        <span id="asr">--:--</span>
+    </div>
+
+    <div class="prayer-row">
+        <span>🌆 Magrib</span>
+        <span id="maghrib">--:--</span>
+    </div>
+
+    <div class="prayer-row">
+        <span>🌙 Isya</span>
+        <span id="isha">--:--</span>
+    </div>
+
 </div>
 
   </div> <!-- penutup container -->
