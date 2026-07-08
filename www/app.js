@@ -397,9 +397,13 @@ img="sore.jpg";
 
 let header=document.getElementById("prayerHeader");
 
-if(header){
-header.style.backgroundImage=
-`url(images/${img})`;
+if (header) {
+    header.style.background =
+        `linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.55)), url("./images/${img}")`;
+
+    header.style.backgroundSize = "cover";
+    header.style.backgroundPosition = "center";
+    header.style.backgroundRepeat = "no-repeat";
 }
 
 }
