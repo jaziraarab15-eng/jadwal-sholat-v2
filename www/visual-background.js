@@ -157,22 +157,20 @@ function updateHeroBackground(){
 
     }
 
+document.body.style.backgroundImage =
+`
+linear-gradient(
+    rgba(0,0,0,.35),
+    rgba(0,0,0,.65)
+),
+url("${image}")
+`;
 
-    document.body.style.backgroundImage =
-    `
-    linear-gradient(
-        rgba(0,0,0,.35),
-        rgba(0,0,0,.65)
-    ),
-    url("${image}")
-    `;
+document.body.style.backgroundSize = "cover";
 
+document.body.style.backgroundPosition = "center";
 
-    document.body.style.backgroundSize = "cover";
-
-    document.body.style.backgroundPosition = "center";
-
-    document.body.style.backgroundAttachment = "fixed";
+document.body.style.backgroundAttachment = "fixed";
 
 }
 
@@ -198,9 +196,11 @@ function updatePrayerBackground(){
     let header=document.getElementById("prayerHeader");
 
     if(header){
-        header.style.backgroundImage=`url("images/${img}")`;
-        header.style.backgroundSize="cover";
+        header.style.background =
+    `linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.55)), url("images/${img}")`;
+        header.style.backgroundSize="100% 100%";
         header.style.backgroundPosition="center";
+        header.style.backgroundRepeat="no-repeat";
     }
 }
 

@@ -981,15 +981,16 @@ font-weight:bold;
 }
 
 .prayer-header{
-height:220px;
-background-size:cover;
-background-position:center;
-border-radius:25px;
-padding:25px;
-color:white;
-overflow:hidden;
-position:relative;
-box-shadow:0 10px 30px rgba(0,0,0,.3);
+    height:220px;
+    background-size:100% 100%;
+    background-position:center;
+    background-repeat:no-repeat;
+    border-radius:25px;
+    padding:25px;
+    color:white;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 
 .prayer-header:before{
