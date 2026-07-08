@@ -30,6 +30,8 @@ notifToggle.addEventListener("change", () => {
             const lon = pos.coords.longitude;
 
 const qibla = calculateQibla(lat, lon);
+qiblaDirection = qibla;
+
 document.getElementById("qibla").textContent =
     "Arah Kiblat: " + Math.round(qibla) + "°";
 
