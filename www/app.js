@@ -194,7 +194,7 @@ window.addEventListener("deviceorientation", (event) => {
     compass.style.transform = `rotate(${rotation}deg)`;
 });
 
-qiblaDirection = qibla;
+// qiblaDirection = qibla;
 
 function calculateQibla(lat, lon) {
     const kaabaLat = 21.4225;
