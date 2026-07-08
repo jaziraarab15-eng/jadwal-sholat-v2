@@ -1010,3 +1010,14 @@ z-index:2;
 .prayer-title{
 font-size:32px;
 }
+
+#prayerHeader{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 220px;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    transition: background-image .5s ease;
+}
