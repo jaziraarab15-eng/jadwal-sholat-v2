@@ -179,4 +179,30 @@ function updateHeroBackground(){
 
 updateHeroBackground();
 
-setInterval(updateHeroBackground,60000);
+function updatePrayerBackground(){
+
+    let hour = new Date().getHours();
+
+    let img = "malam.jpg";
+
+    if(hour>=4 && hour<10){
+        img="subuh.jpg";
+    }
+    else if(hour>=10 && hour<15){
+        img="siang.jpg";
+    }
+    else if(hour>=15 && hour<18){
+        img="sore.jpg";
+    }
+
+    let header=document.getElementById("prayerHeader");
+
+    if(header){
+        header.style.backgroundImage=`url("images/${img}")`;
+        header.style.backgroundSize="cover";
+        header.style.backgroundPosition="center";
+    }
+}
+
+updatePrayerBackground();
+setInterval(updatePrayerBackground,60000);

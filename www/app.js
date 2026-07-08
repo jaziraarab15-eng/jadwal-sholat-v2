@@ -1,4 +1,4 @@
-const { BackgroundRunner } = window.Capacitor.Plugins;
+const BackgroundRunner = window.Capacitor?.Plugins?.BackgroundRunner;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -222,9 +222,6 @@ const navItems = document.querySelectorAll(".nav-item");
 
 // ===== Navigation =====
 
-document.addEventListener("DOMContentLoaded", () => {
-
-
 function showPage(pageId, navId){
 
     document.querySelectorAll(".page").forEach(page=>{
@@ -281,10 +278,6 @@ document.getElementById("nav-more").onclick = () =>{
     showPage("page-more","nav-more");
 };
 
-
-});
-
-
 // ===== Jadwal Bulanan =====
 
 async function loadMonthlySchedule(){
@@ -292,7 +285,6 @@ async function loadMonthlySchedule(){
     const table = document.getElementById("monthlyBody");
 
     if(!table) return;
-97
 
     const now = new Date();
 
