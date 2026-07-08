@@ -219,66 +219,30 @@ function calculateQibla(lat, lon) {
 
 // ===== Multi Page Navigation =====
 
-const pages = document.querySelectorAll(".page");
-const navItems = document.querySelectorAll(".nav-item");
+document.addEventListener("DOMContentLoaded", () => {
 
-// ===== Navigation =====
+    function showPage(pageId) {
 
-function showPage(pageId, navId){
+        document.querySelectorAll(".page").forEach(p => {
+            p.classList.remove("active");
+        });
 
-    document.querySelectorAll(".page").forEach(page=>{
-        page.classList.remove("active");
-    });
+        const page = document.getElementById(pageId);
 
-
-    document.querySelectorAll(".nav-item").forEach(nav=>{
-        nav.classList.remove("active");
-    });
-
-
-    const page = document.getElementById(pageId);
-    const nav = document.getElementById(navId);
-
-
-    if(page){
-        page.classList.add("active");
+        if (page) {
+            page.classList.add("active");
+        }
     }
 
-    if(nav){
-        nav.classList.add("active");
-    }
+    document.getElementById("nav-home").onclick = () => showPage("page-home");
+    document.getElementById("nav-qibla").onclick = () => showPage("page-qibla");
+    document.getElementById("nav-calendar").onclick = () => showPage("page-calendar");
+    document.getElementById("nav-hijri").onclick = () => showPage("page-hijri");
+    document.getElementById("nav-more").onclick = () => showPage("page-more");
 
-}
+    showPage("page-home");
 
-
-// Sholat
-document.getElementById("nav-home").onclick = () =>{
-    showPage("page-home","nav-home");
-};
-
-
-// Kiblat
-document.getElementById("nav-qibla").onclick = () =>{
-    showPage("page-qibla","nav-qibla");
-};
-
-
-// Jadwal
-document.getElementById("nav-calendar").onclick = () =>{
-    showPage("page-calendar","nav-calendar");
-};
-
-
-// Hijriah
-document.getElementById("nav-hijri").onclick = () =>{
-    showPage("page-hijri","nav-hijri");
-};
-
-
-// Lainnya
-document.getElementById("nav-more").onclick = () =>{
-    showPage("page-more","nav-more");
-};
+});
 
 // ===== Jadwal Bulanan =====
 
