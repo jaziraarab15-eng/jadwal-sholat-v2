@@ -828,41 +828,58 @@ background:#eef6f4;
 
 .prayer-card{
 
-margin:0 18px 25px;
+    margin:18px;
 
-background:white;
+    background:white;
 
-border-radius:20px;
+    border-radius:24px;
 
-overflow:hidden;
+    overflow:hidden;
 
-box-shadow:0 6px 20px rgba(0,0,0,.08);
+    box-shadow:0 10px 25px rgba(0,0,0,.10);
 
 }
 
 .prayer-row{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding:16px 18px;
+    align-items:center;
 
-border-bottom:1px solid #eee;
+    padding:18px 20px;
 
-font-size:17px;
+    border-bottom:1px solid rgba(0,0,0,.08);
+
+    font-size:17px;
+
+    transition:.3s;
 
 }
 
 .active-prayer{
 
-background:#10b981;
+    background:linear-gradient(135deg,#16a34a,#10b981);
 
-color:white;
+    color:#fff;
 
-font-weight:bold;
+    font-weight:bold;
+
+    transform:scale(1.02);
+
+    box-shadow:0 6px 18px rgba(16,185,129,.35);
+
+    transition:all .3s ease;
 
 }
+
+.active-prayer span{
+
+    color:#fff;
+
+}
+
 
 /* ===== Hero Premium ===== */
 
@@ -982,25 +999,33 @@ font-weight:bold;
 
 .prayer-header{
     height:220px;
-    background-size:100% 100%;
-    background-position:center;
-    background-repeat:no-repeat;
-    border-radius:25px;
-    padding:25px;
-    color:white;
+    border-radius:24px;
+    padding:24px;
+    color:#fff;
     overflow:hidden;
     position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.25);
+
+    transition:
+        background-image .6s ease,
+        transform .25s ease;
 }
 
 .prayer-header:before{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(
-rgba(0,0,0,.2),
-rgba(0,0,0,.75)
-);
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.15),
+        rgba(0,0,0,.65)
+    );
 }
 
 .prayer-header>*{
