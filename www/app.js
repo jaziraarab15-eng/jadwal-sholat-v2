@@ -1,301 +1,475 @@
-let currentLatitude = null;
-let currentLongitude = null;
+// =====================================
+// Jadwal Sholat Premium v2.0
+// Bagian 1 - Inisialisasi
+// =====================================
 
-const BackgroundRunner = window.Capacitor?.Plugins?.BackgroundRunner;
+const API_METHOD = 11;
 
-document.addEventListener("DOMContentLoaded", () => {
+const state = {
+    latitude: null,
+    longitude: null,
+    city: "",
+    prayerTimes: null,
+    hijri: null,
+    qibla: 0,
+    settings: {
+        notification: true,
+        darkMode: false,
+        adhan: "makkah"
+    }
+};
 
-    const kota = document.getElementById("kota");
-    const tanggal = document.getElementById("tanggal");
-    const notifToggle = document.getElementById("notifToggle");
+const el = {};
 
-notifToggle.checked = localStorage.getItem("notif") !== "off";
+document.addEventListener("DOMContentLoaded", initApp);
 
-notifToggle.addEventListener("change", () => {
-    localStorage.setItem(
-        "notif",
-        notifToggle.checked ? "on" : "off"
+async function initApp(){
+
+    cacheElements();
+
+    loadSettings();
+
+    bindEvents();
+
+    await loadLocation();
+
+}
+
+function cacheElements(){
+
+    el.city=document.getElementById("kota");
+    el.date=document.getElementById("tanggal");
+    el.hijri=document.getElementById("hijri");
+
+    el.fajr=document.getElementById("fajr");
+    el.sunrise=document.getElementById("sunrise");
+    el.dhuhr=document.getElementById("dhuhr");
+    el.asr=document.getElementById("asr");
+    el.maghrib=document.getElementById("maghrib");
+    el.isha=document.getElementById("isha");
+
+    el.nextPrayer=document.getElementById("nextPrayer");
+    el.countdown=document.getElementById("countdown");
+
+    el.qibla=document.getElementById("qibla");
+
+    el.notif=document.getElementById("notifToggle");
+
+}
+
+function loadSettings(){
+
+    state.settings.notification=
+        localStorage.getItem("notif")!=="off";
+
+    state.settings.darkMode=
+        localStorage.getItem("dark")=="on";
+
+    state.settings.adhan=
+        localStorage.getItem("adhan") || "makkah";
+
+    if(el.notif)
+        el.notif.checked=
+            state.settings.notification;
+
+    if(state.settings.darkMode)
+        document.body.classList.add("dark");
+
+}
+
+function bindEvents(){
+
+    if(el.notif){
+
+        el.notif.addEventListener("change",()=>{
+
+            state.settings.notification=
+                el.notif.checked;
+
+            localStorage.setItem(
+                "notif",
+                el.notif.checked?"on":"off"
+            );
+
+        });
+
+    }
+
+}
+
+async function loadLocation(){
+
+    if(!navigator.geolocation){
+
+        el.city.textContent=
+            "GPS tidak didukung";
+
+        return;
+
+    }
+
+    el.city.textContent=
+        "📍 Mengambil lokasi...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        onLocationSuccess,
+
+        onLocationError,
+
+        {
+            enableHighAccuracy:true,
+            timeout:15000,
+            maximumAge:0
+        }
+
     );
-});
 
-    async function loadPrayerTimes() {
-
-        if (!navigator.geolocation) {
-            kota.textContent = "❌ GPS tidak didukung";
-            return;
-        }
-
-        kota.textContent = "📍 Mencari lokasi...";
-
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-
-currentLatitude = lat;
-currentLongitude = lon;
-
-const qibla = calculateQibla(lat, lon);
-qiblaDirection = qibla;
-
-document.getElementById("qibla").textContent =
-    "Arah Kiblat: " + Math.round(qibla) + "°";
-
-const kaabaLat = 21.4225;
-const kaabaLon = 39.8262;
-
-function toRad(v) {
-    return v * Math.PI / 180;
 }
 
-function toDeg(v) {
-    return v * 180 / Math.PI;
+async function onLocationSuccess(position){
+
+    state.latitude=
+        position.coords.latitude;
+
+    state.longitude=
+        position.coords.longitude;
+
+    await reverseGeocode();
+
+    await loadPrayerTimes();
+
 }
 
-const dLon = toRad(kaabaLon - lon);
-const lat1 = toRad(lat);
-const lat2 = toRad(kaabaLat);
+function onLocationError(err){
 
-const y = Math.sin(dLon) * Math.cos(lat2);
-const x = Math.cos(lat1) * Math.sin(lat2) -
-          Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+    el.city.textContent=
+        "❌ "+err.message;
 
-let brng = toDeg(Math.atan2(y, x));
-brng = (brng + 360) % 360;
-
-document.getElementById("qibla").textContent =
-    "🧭 Kiblat: " + Math.round(brng) + "° dari utara";
-
-            try {
-                const geo = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
-                );
-
-                const data = await geo.json();
-
-                const city =
-                    data.address.city ||
-                    data.address.town ||
-                    data.address.village ||
-                    "Lokasi Anda";
-
-                kota.textContent = "📍 " + city;
-
-                const res = await fetch(
-                    `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`
-                );
-
-                const json = await res.json();
-                const t = json.data.timings;
-
-                const hijri = json.data.date.hijri;
-
-document.getElementById("hijri").textContent =
-    "🌙 " +
-    hijri.day + " " +
-    hijri.month.en + " " +
-    hijri.year + " H";
-
-           if (notifToggle.checked) {
-    initNotifications();
-    schedulePrayerNotifications(t);
 }
 
-                document.getElementById("fajr").textContent = t.Fajr;
-                document.getElementById("sunrise").textContent = t.Sunrise;
-                document.getElementById("dhuhr").textContent = t.Dhuhr;
-                document.getElementById("asr").textContent = t.Asr;
-                document.getElementById("maghrib").textContent = t.Maghrib;
-                document.getElementById("isha").textContent = t.Isha;
-
-                updatePrayerHighlight(t);
-
-                tanggal.textContent = new Date().toLocaleDateString("id-ID", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                });
-
-                startCountdown(t);
-             // loadMonthlySchedule();
-
-            } catch (e) {
-    console.log(e);
-    alert(e.message);
-    kota.textContent = "❌ Error load data";
-}
-
-        }, (err) => {
-            kota.textContent = "❌ GPS error: " + err.message;
-        });
-    }
-
-    function startCountdown(t) {
-
-        function tick() {
-            const now = new Date();
-
-            const list = [
-                ["Subuh", t.Fajr],
-                ["Zuhur", t.Dhuhr],
-                ["Asar", t.Asr],
-                ["Magrib", t.Maghrib],
-                ["Isya", t.Isha]
-            ];
-
-            let next = null;
-
-            for (const item of list) {
-                const [h, m] = item[1].split(":");
-                const d = new Date();
-                d.setHours(Number(h), Number(m), 0, 0);
-
-                if (d > now) {
-                    next = item;
-                    break;
-                }
-            }
-
-            if (!next) next = list[0];
-
-            document.getElementById("nextPrayer").textContent =
-                "🕌 " + next[0];
-
-            const [h, m] = next[1].split(":").map(Number);
-
-const target = new Date();
-target.setHours(h, m, 0, 0);
-
-if (target < now) {
-    target.setDate(target.getDate() + 1);
-}
-
-const diff = target - now;
-
-const jam = Math.floor(diff / 3600000);
-const menit = Math.floor((diff % 3600000) / 60000);
-const detik = Math.floor((diff % 60000) / 1000);
-
-document.getElementById("countdown").textContent =
-    `${String(jam).padStart(2, "0")}:${String(menit).padStart(2, "0")}:${String(detik).padStart(2, "0")}`;
-        }
-
-        setInterval(tick, 1000);
-    }
-
-let qiblaDirection = 0;
-
-window.addEventListener("deviceorientation", (event) => {
-    if (event.alpha == null) return;
-
-    const compass = document.getElementById("compass");
-    if (!compass) return;
-
-    // arah HP
-    const heading = event.alpha;
-
-    // panah kiblat = arah Ka'bah - arah HP
-    const rotation = qiblaDirection - heading;
-
-    compass.style.transform = `rotate(${rotation}deg)`;
-});
-
-// qiblaDirection = qibla;
-
-function calculateQibla(lat, lon) {
-    const kaabaLat = 21.4225;
-    const kaabaLon = 39.8262;
-
-    const toRad = (deg) => deg * (Math.PI / 180);
-    const toDeg = (rad) => rad * (180 / Math.PI);
-
-    const dLon = toRad(kaabaLon - lon);
-    const lat1 = toRad(lat);
-    const lat2 = toRad(kaabaLat);
-
-    const y = Math.sin(dLon);
-    const x = Math.cos(lat1) * Math.tan(lat2) - Math.sin(lat1) * Math.cos(dLon);
-
-    let brng = toDeg(Math.atan2(y, x));
-    return (brng + 360) % 360;
-}
-
-    loadPrayerTimes();
-});
-
-// ===== Multi Page Navigation =====
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    function showPage(pageId) {
-
-        document.querySelectorAll(".page").forEach(p => {
-            p.classList.remove("active");
-        });
-
-        const page = document.getElementById(pageId);
-
-        if (page) {
-            page.classList.add("active");
-        }
-    }
-
-    document.getElementById("nav-home").onclick = () => showPage("page-home");
-    document.getElementById("nav-qibla").onclick = () => showPage("page-qibla");
-    document.getElementById("nav-calendar").onclick = () => showPage("page-calendar");
-    document.getElementById("nav-hijri").onclick = () => showPage("page-hijri");
-    document.getElementById("nav-more").onclick = () => showPage("page-more");
-
-    showPage("page-home");
-
-});
-
-// ===== Jadwal Bulanan =====
-
-async function loadMonthlySchedule(){
-
-    const table = document.getElementById("monthlyBody");
-
-    if(!table) return;
-
-    const now = new Date();
-
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear();
-
-
-     if (currentLatitude === null || currentLongitude === null) {
-    return;
-}
-
-const latitude = currentLatitude;
-const longitude = currentLongitude;
-
-    const url =
-    `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${latitude}&longitude=${longitude}&method=20`;
-
+async function reverseGeocode(){
 
     try{
 
-        const response = await fetch(url);
+        const url=
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
 
-        const data = await response.json();
+        const res=await fetch(url);
 
+        const json=await res.json();
+
+        state.city=
+            json.address.city ||
+            json.address.town ||
+            json.address.village ||
+            "Lokasi Anda";
+
+        el.city.textContent=
+            "📍 "+state.city;
+
+    }catch(e){
+
+        el.city.textContent=
+            "📍 Lokasi Anda";
+
+    }
+
+}
+
+// =====================================
+// Bagian 2
+// Jadwal Sholat + Countdown
+// =====================================
+
+async function loadPrayerTimes(){
+
+    try{
+
+        const url =
+        `https://api.aladhan.com/v1/timings?latitude=${state.latitude}&longitude=${state.longitude}&method=${API_METHOD}`;
+
+        const res = await fetch(url);
+
+        const json = await res.json();
+
+        state.prayerTimes = json.data.timings;
+
+        state.hijri = json.data.date.hijri;
+
+        fillPrayerTimes();
+
+        fillHijri();
+
+        fillHijriPage();
+
+        calculateQibla();
+
+        updateToday();
+
+        startCountdown();
+
+        updatePrayerHighlight();
+
+        loadMonthlySchedule();
+
+    }catch(e){
+
+        alert("Gagal mengambil jadwal sholat");
+
+        console.log(e);
+
+    }
+
+}
+
+function fillPrayerTimes(){
+
+    const t = state.prayerTimes;
+
+    el.fajr.textContent = t.Fajr.substring(0,5);
+
+    el.sunrise.textContent = t.Sunrise.substring(0,5);
+
+    el.dhuhr.textContent = t.Dhuhr.substring(0,5);
+
+    el.asr.textContent = t.Asr.substring(0,5);
+
+    el.maghrib.textContent = t.Maghrib.substring(0,5);
+
+    el.isha.textContent = t.Isha.substring(0,5);
+
+}
+
+function fillHijri(){
+
+    if(!state.hijri) return;
+
+    el.hijri.textContent =
+    "🌙 " +
+    state.hijri.day +
+    " " +
+    state.hijri.month.en +
+    " " +
+    state.hijri.year +
+    " H";
+
+}
+
+function updateToday(){
+
+    el.date.textContent =
+    new Date().toLocaleDateString("id-ID",{
+
+        weekday:"long",
+
+        day:"numeric",
+
+        month:"long",
+
+        year:"numeric"
+
+    });
+
+}
+
+function startCountdown(){
+
+    updateCountdown();
+
+    setInterval(updateCountdown,1000);
+
+}
+
+function updateCountdown(){
+
+    if(!state.prayerTimes) return;
+
+    const list=[
+
+        ["Subuh",state.prayerTimes.Fajr],
+
+        ["Zuhur",state.prayerTimes.Dhuhr],
+
+        ["Asar",state.prayerTimes.Asr],
+
+        ["Magrib",state.prayerTimes.Maghrib],
+
+        ["Isya",state.prayerTimes.Isha]
+
+    ];
+
+    const now=new Date();
+
+    let next=null;
+
+    for(const p of list){
+
+        const time=p[1].substring(0,5);
+
+        const h=parseInt(time.split(":")[0]);
+
+        const m=parseInt(time.split(":")[1]);
+
+        const d=new Date();
+
+        d.setHours(h,m,0,0);
+
+        if(d>now){
+
+            next={
+                name:p[0],
+                target:d
+            };
+
+            break;
+
+        }
+
+    }
+
+    if(next==null){
+
+       const h=parseInt(list[0][1].split(":")[0]); 
+       
+        const .parseInt(list[0][1].split(":")[1]);
+
+        const d=new Date();
+
+        d.setDate(d.getDate()+1);
+
+        d.setHours(h,m,0,0);
+
+        next={
+
+            name:"Subuh",
+
+            target:d
+
+        };
+
+    }
+
+    el.nextPrayer.textContent="🕌 "+next.name;
+
+    const diff=next.target-now;
+
+    const hh=Math.floor(diff/3600000);
+
+    const mm=Math.floor((diff%3600000)/60000);
+
+    const ss=Math.floor((diff%60000)/1000);
+
+    el.countdown.textContent=
+
+    String(hh).padStart(2,"0")+":"+
+
+    String(mm).padStart(2,"0")+":"+
+
+    String(ss).padStart(2,"0");
+
+}
+
+function updatePrayerHighlight(){
+
+    document
+
+    .querySelectorAll(".prayer-row")
+
+    .forEach(x=>x.classList.remove("active-prayer"));
+
+    const schedule=[
+
+        ["fajr",state.prayerTimes.Fajr],
+
+        ["sunrise",state.prayerTimes.Sunrise],
+
+        ["dhuhr",state.prayerTimes.Dhuhr],
+
+        ["asr",state.prayerTimes.Asr],
+
+        ["maghrib",state.prayerTimes.Maghrib],
+
+        ["isha",state.prayerTimes.Isha]
+
+    ];
+
+    const now=new Date();
+
+    const current=
+
+    now.getHours()*60+
+
+    now.getMinutes();
+
+    let active=0;
+
+    schedule.forEach((p,i)=>{
+
+        const t=p[1].substring(0,5);
+
+        const minute=
+
+        parseInt(t.split(":")[0])*60+
+
+        parseInt(t.split(":")[1]);
+
+        if(current>=minute)
+
+            active=i;
+
+    });
+
+    document
+
+    .getElementById(schedule[active][0])
+
+    .parentElement
+
+    .classList
+
+    .add("active-prayer");
+
+}
+
+// =====================================
+// Bagian 3
+// Kiblat + Jadwal Bulanan + Hijriah
+// =====================================
+
+async function loadMonthlySchedule(){
+
+    if(state.latitude==null || state.longitude==null)
+        return;
+
+    const table=document.getElementById("monthlyBody");
+
+    if(!table) return;
+
+    const now=new Date();
+
+    const month=now.getMonth()+1;
+
+    const year=now.getFullYear();
+
+    const url=
+    `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${state.latitude}&longitude=${state.longitude}&method=${API_METHOD}`;
+
+    try{
+
+        const res=await fetch(url);
+
+        const json=await res.json();
 
         table.innerHTML="";
 
+        json.data.forEach(day=>{
 
-        data.data.forEach(day=>{
+            const t=day.timings;
 
+            table.innerHTML+=`
 
-            const t = day.timings;
-
-
-            const row = document.createElement("tr");
-
-
-            row.innerHTML = `
+            <tr>
 
             <td>${day.date.gregorian.day}</td>
 
@@ -309,19 +483,17 @@ const longitude = currentLongitude;
 
             <td>${t.Isha.substring(0,5)}</td>
 
+            </tr>
+
             `;
-
-
-            table.appendChild(row);
-
 
         });
 
-
     }catch(e){
 
-        table.innerHTML =
-        "<tr><td colspan='6'>Gagal memuat jadwal</td></tr>";
+        table.innerHTML=
+
+        "<tr><td colspan='6'>❌ Gagal memuat jadwal</td></tr>";
 
         console.log(e);
 
@@ -329,61 +501,308 @@ const longitude = currentLongitude;
 
 }
 
+function calculateQibla(){
 
-loadMonthlySchedule();
+    const kaabaLat=21.4225;
 
-// ===== Dark Mode =====
+    const kaabaLon=39.8262;
 
-const darkBtn = document.getElementById("darkModeBtn");
+    const toRad=d=>d*Math.PI/180;
 
+    const toDeg=r=>r*180/Math.PI;
 
-if(darkBtn){
+    const dLon=toRad(kaabaLon-state.longitude);
 
-darkBtn.addEventListener("click",()=>{
+    const lat1=toRad(state.latitude);
 
-document.body.classList.toggle("dark");
+    const lat2=toRad(kaabaLat);
 
+    const y=Math.sin(dLon);
+
+    const x=
+
+    Math.cos(lat1)*Math.tan(lat2)
+
+    -
+
+    Math.sin(lat1)*Math.cos(dLon);
+
+    state.qibla=
+
+    (toDeg(Math.atan2(y,x))+360)%360;
+
+    const text=document.getElementById("qibla");
+
+    if(text)
+
+        text.textContent=
+
+        "🧭 Kiblat "+Math.round(state.qibla)+"°";
+
+    const degree=document.getElementById("qibla-degree");
+
+    if(degree)
+
+        degree.textContent=
+
+        Math.round(state.qibla)+"°";
+
+    const loc=document.getElementById("qibla-location");
+
+    if(loc)
+
+        loc.textContent=state.city;
+
+}
+
+window.addEventListener(
+
+"deviceorientation",
+
+e=>{
+
+    if(e.alpha==null) return;
+
+    const c=document.getElementById("compass");
+
+    const c2=document.getElementById("compass-page");
+
+    const rotate=
+
+    state.qibla-e.alpha;
+
+    if(c)
+
+        c.style.transform=
+
+        `rotate(${rotate}deg)`;
+
+    if(c2)
+
+        c2.style.transform=
+
+        `rotate(${rotate}deg)`;
 
 });
 
+function fillHijriPage(){
+
+    if(!state.hijri) return;
+
+    const day=document.getElementById("hijri-day");
+
+    const month=document.getElementById("hijri-month");
+
+    const greg=document.getElementById("hijri-gregorian");
+
+    if(day)
+
+        day.textContent=
+
+        state.hijri.day;
+
+    if(month)
+
+        month.textContent=
+
+        state.hijri.month.en+
+
+        " "+
+
+        state.hijri.year+" H";
+
+    if(greg)
+
+        greg.textContent=
+
+        new Date().toLocaleDateString(
+
+        "id-ID",
+
+        {
+
+            weekday:"long",
+
+            day:"numeric",
+
+            month:"long",
+
+            year:"numeric"
+
+        });
+
+    renderHijriCalendar();
+
 }
 
-// ===== Highlight Waktu Sholat Aktif =====
+function renderHijriCalendar(){
 
-function updatePrayerHighlight(times) {
+    const grid=document.getElementById("hijriCalendar");
 
-    document.querySelectorAll(".prayer-row").forEach(row => {
-        row.classList.remove("active-prayer");
-    });
+    if(!grid) return;
 
-    const schedule = [
-        { id: "fajr", time: times.Fajr },
-        { id: "sunrise", time: times.Sunrise },
-        { id: "dhuhr", time: times.Dhuhr },
-        { id: "asr", time: times.Asr },
-        { id: "maghrib", time: times.Maghrib },
-        { id: "isha", time: times.Isha }
-    ];
+    grid.innerHTML="";
 
-    const now = new Date();
-    const current = now.getHours() * 60 + now.getMinutes();
+    for(let i=1;i<=30;i++){
 
-    let activeIndex = 0;
+        const box=document.createElement("div");
 
-    schedule.forEach((p, i) => {
+        box.className="hijri-day-box";
 
-        const t = p.time.split(":");
+        box.textContent=i;
 
-        const minute = parseInt(t[0]) * 60 + parseInt(t[1]);
+        if(state.hijri &&
 
-        if (current >= minute) {
-            activeIndex = i;
-        }
+           Number(state.hijri.day)===i)
 
-    });
+            box.classList.add("today");
 
-    document.getElementById(schedule[activeIndex].id)
-        .parentElement
-        .classList.add("active-prayer");
+        grid.appendChild(box);
+
+    }
 
 }
+
+// =====================================
+// Bagian 4
+// Settings + Navigation + Auto Refresh
+// =====================================
+
+// ---------- Dark Mode ----------
+
+const darkBtn=document.getElementById("darkModeBtn");
+
+if(darkBtn){
+
+    darkBtn.onclick=()=>{
+
+        state.settings.darkMode=
+        !state.settings.darkMode;
+
+        document.body.classList.toggle(
+            "dark",
+            state.settings.darkMode
+        );
+
+        localStorage.setItem(
+            "dark",
+            state.settings.darkMode?"on":"off"
+        );
+
+    };
+
+}
+
+// ---------- Pilih Adzan ----------
+
+const adhanSelect=document.getElementById("adhanSelect");
+
+if(adhanSelect){
+
+    adhanSelect.value=state.settings.adhan;
+
+    adhanSelect.onchange=()=>{
+
+        state.settings.adhan=
+        adhanSelect.value;
+
+        localStorage.setItem(
+            "adhan",
+            adhanSelect.value
+        );
+
+    };
+
+}
+
+// ---------- Navigasi ----------
+
+function showPage(id){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+    const page=document.getElementById(id);
+
+    if(page)
+        page.classList.add("active");
+
+}
+
+[
+["nav-home","page-home"],
+["nav-qibla","page-qibla"],
+["nav-calendar","page-calendar"],
+["nav-hijri","page-hijri"],
+["nav-more","page-more"]
+
+].forEach(item=>{
+
+    const btn=document.getElementById(item[0]);
+
+    if(btn){
+
+        btn.onclick=()=>{
+
+            showPage(item[1]);
+
+        };
+
+    }
+
+});
+
+showPage("page-home");
+
+// ---------- Auto Refresh ----------
+
+setInterval(()=>{
+
+    const now=new Date();
+
+    if(
+        now.getHours()===0 &&
+        now.getMinutes()===0 &&
+        now.getSeconds()<2
+    ){
+
+        loadPrayerTimes();
+
+    }
+
+},1000);
+
+// ---------- Online ----------
+
+window.addEventListener("online",()=>{
+
+    loadPrayerTimes();
+
+});
+
+// ---------- Offline ----------
+
+window.addEventListener("offline",()=>{
+
+    alert(
+        "Mode Offline\nMenggunakan data terakhir."
+    );
+
+});
+
+// ---------- Error ----------
+
+window.onerror=function(msg){
+
+    console.log(msg);
+
+};
+
+// ---------- Selesai ----------
+
+console.log(
+
+"Jadwal Sholat Premium v2.0 Loaded"
+
+);
