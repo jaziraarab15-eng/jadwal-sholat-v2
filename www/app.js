@@ -1,3 +1,6 @@
+let currentLatitude = null;
+let currentLongitude = null;
+
 const BackgroundRunner = window.Capacitor?.Plugins?.BackgroundRunner;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +31,9 @@ notifToggle.addEventListener("change", () => {
 
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
+
+currentLatitude = lat;
+currentLongitude = lon;
 
 const qibla = calculateQibla(lat, lon);
 qiblaDirection = qibla;
@@ -112,6 +118,7 @@ document.getElementById("hijri").textContent =
                 });
 
                 startCountdown(t);
+             // loadMonthlySchedule();
 
             } catch (e) {
     console.log(e);
@@ -258,10 +265,12 @@ async function loadMonthlySchedule(){
     const year = now.getFullYear();
 
 
-    // Contoh koordinat Rancaekek
-    const latitude = -6.98;
-    const longitude = 107.75;
+     if (currentLatitude === null || currentLongitude === null) {
+    return;
+}
 
+const latitude = currentLatitude;
+const longitude = currentLongitude;
 
     const url =
     `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${latitude}&longitude=${longitude}&method=20`;

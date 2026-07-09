@@ -279,6 +279,9 @@ span{
     z-index:9999;
 }
 
+<<<<<<< HEAD
+/* ===== Kalender Hijriah ===== */
+=======
 .nav-item{
     display:flex;
     flex-direction:column;
@@ -340,15 +343,49 @@ span{
     font-size:16px;
     color:#666;
 }
+>>>>>>> cd2fff3 (Tambah transisi halus background)
 
 .hijri-calendar{
     margin-top:20px;
 }
 
+<<<<<<< HEAD
+#hijriCalendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+    margin-top:15px;
+}
+
+.hijri-day-box{
+    background:#f8fafc;
+    border-radius:12px;
+    padding:12px 0;
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.hijri-day-box.today{
+    background:#10b981;
+    color:#fff;
+}
+
+=======
+>>>>>>> cd2fff3 (Tambah transisi halus background)
 .calendar-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+<<<<<<< HEAD
+    margin-bottom:15px;
+}
+
+.calendar-header button{
+    width:38px;
+    height:38px;
+=======
     margin-bottom:18px;
 }
 
@@ -362,22 +399,33 @@ span{
 .calendar-header button{
     width:42px;
     height:42px;
+>>>>>>> cd2fff3 (Tambah transisi halus background)
     border:none;
     border-radius:50%;
     background:#10b981;
     color:#fff;
     font-size:18px;
     cursor:pointer;
+<<<<<<< HEAD
+=======
     transition:.2s;
 }
 
 .calendar-header button:active{
     transform:scale(.92);
+>>>>>>> cd2fff3 (Tambah transisi halus background)
 }
 
 .calendar-week{
     display:grid;
     grid-template-columns:repeat(7,1fr);
+<<<<<<< HEAD
+    text-align:center;
+    font-weight:bold;
+    color:#666;
+    margin-bottom:10px;
+}
+=======
     gap:6px;
     margin-bottom:10px;
 }
@@ -607,3 +655,4 @@ body::after{
         font-size:11px;
     }
 }
+>>>>>>> cd2fff3 (Tambah transisi halus background)
