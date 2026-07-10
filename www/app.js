@@ -351,27 +351,36 @@ async function loadPrayerTimes(){
 
     try{
 
-        const url=
-
+        const url =
 `https://api.aladhan.com/v1/timings?latitude=${App.latitude}&longitude=${App.longitude}&method=11`;
 
-        const res=await fetch(url);
+        console.log("Request:", url);
 
-        const json=await res.json();
+        const res = await fetch(url);
 
-        App.prayerTimes=json.data.timings;
+        console.log("Status:", res.status);
 
-        App.hijri=json.data.date.hijri;
+        if(!res.ok){
+            throw new Error("HTTP " + res.status);
+        }
+
+        const json = await res.json();
+
+        console.log(json);
+
+        App.prayerTimes = json.data.timings;
+        App.hijri = json.data.date.hijri;
 
         updatePrayerUI();
-
-startCountdown();
+        startCountdown();
 
     }catch(e){
 
-        toast("Gagal memuat jadwal");
+        console.error("loadPrayerTimes:", e);
 
-        console.log(e);
+        alert("Error memuat jadwal:\n" + e.message);
+
+        hideLoading();
 
     }
 
@@ -595,14 +604,16 @@ async function initGPS(){
         App.longitude=gps.lon;
 
         await loadCity(
+    App.latitude,
+    App.longitude
+);
 
-            App.latitude,
+console.log("Latitude:", App.latitude);
+console.log("Longitude:", App.longitude);
 
-            App.longitude
-
-        );
-
-        await loadPrayerTimes();
+console.log("Memuat jadwal sholat...");
+await loadPrayerTimes();
+console.log("Jadwal sholat berhasil dimuat");
 
 await loadMonthlySchedule();
 
