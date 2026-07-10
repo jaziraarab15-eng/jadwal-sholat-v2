@@ -256,37 +256,46 @@ async function getLocation(){
 
         }
 
-        navigator.geolocation.getCurrentPosition(
+navigator.geolocation.getCurrentPosition(
 
-            pos=>{
+    pos=>{
 
-                resolve({
+        resolve({
 
-                    lat:pos.coords.latitude,
+            lat:pos.coords.latitude,
 
-                    lon:pos.coords.longitude
+            lon:pos.coords.longitude
 
-                });
+        });
 
-            },
+    },
 
-            err=>reject(err.message),
+    err=>{
 
-            {
+        console.error(err);
 
-                enableHighAccuracy:true,
+        alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.");
 
-                timeout:15000,
+        reject(err.message);
 
-                maximumAge:0
+    },
 
-            }
+    {
 
-        );
+        enableHighAccuracy:true,
 
-    });
+        timeout:15000,
+
+        maximumAge:0
+
+    }
+
+);
+
+});
 
 }
+
 
 /* ==========================================================
    NAMA KOTA
@@ -1365,7 +1374,6 @@ initAdhanSelector();
 });
 
 /* ==========================================================
-   BAGIAN 5
    FINAL STARTUP & AUTO REFRESH
 ========================================================== */
 
