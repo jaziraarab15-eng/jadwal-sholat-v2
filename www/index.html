@@ -4,204 +4,153 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<title>Jadwal Sholat v3.0</title>
 
-<meta name="theme-color"
-content="#0f172a">
-
-<title>Jadwal Sholat</title>
-
-<link rel="stylesheet"
-href="style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<!-- ===================================================
+<!-- ===========================
      HOME
-=================================================== -->
+=========================== -->
 
-<div id="page-home" class="page active">
+<section id="page-home" class="page active">
 
 <div class="container">
 
-<!-- Hero -->
+<header class="hero">
 
-<div class="prayer-header fade-in">
+<h1>🕌 Jadwal Sholat</h1>
 
-<h1 class="prayer-title">
-🕌 Jadwal Sholat
-</h1>
-
-<h2 id="kota">
+<p id="kota">
 📍 Memuat lokasi...
-</h2>
+</p>
 
 <p id="tanggal">
 Memuat tanggal...
 </p>
 
 <p id="hijri">
-🌙 Memuat tanggal Hijriah...
+🌙 Memuat Hijriah...
 </p>
+
+</header>
+
+<div class="next-card">
+
+<div class="next-label">
+
+Sholat Berikutnya
 
 </div>
 
-<!-- Next Prayer -->
-
-<div class="card scale-in">
-
-<small>
-Sholat Berikutnya
-</small>
-
 <h2 id="nextPrayer">
+
 Subuh
+
 </h2>
 
-<h1 id="countdown">
+<div id="countdown">
+
 00:00:00
-</h1>
 
-<div class="notify-box">
+</div>
 
-<label>
+<label class="switch">
 
 <input
 type="checkbox"
 id="notifToggle"
 checked>
 
-🔔 Notifikasi Adzan
+<span>🔔 Notifikasi Adzan</span>
 
 </label>
 
 </div>
 
-</div>
-
-<!-- Jadwal -->
-
-<div class="prayer-card fade-in">
+<div class="prayer-card">
 
 <div class="prayer-row">
 
-<span>
-🌅 Subuh
-</span>
+<span>🌅 Subuh</span>
 
-<span id="fajr">
---:--
-</span>
+<b id="fajr">--:--</b>
 
 </div>
 
 <div class="prayer-row">
 
-<span>
-🌄 Syuruq
-</span>
+<span>🌄 Syuruq</span>
 
-<span id="sunrise">
---:--
-</span>
+<b id="sunrise">--:--</b>
 
 </div>
 
 <div class="prayer-row">
 
-<span>
-☀️ Zuhur
-</span>
+<span>☀️ Zuhur</span>
 
-<span id="dhuhr">
---:--
-</span>
+<b id="dhuhr">--:--</b>
 
 </div>
 
 <div class="prayer-row">
 
-<span>
-🌇 Asar
-</span>
+<span>🌇 Asar</span>
 
-<span id="asr">
---:--
-</span>
+<b id="asr">--:--</b>
 
 </div>
 
 <div class="prayer-row">
 
-<span>
-🌆 Maghrib
-</span>
+<span>🌆 Magrib</span>
 
-<span id="maghrib">
---:--
-</span>
+<b id="maghrib">--:--</b>
 
 </div>
 
 <div class="prayer-row">
 
-<span>
-🌙 Isya
-</span>
+<span>🌙 Isya</span>
 
-<span id="isha">
---:--
-</span>
+<b id="isha">--:--</b>
 
 </div>
 
 </div>
 
-<!-- Ringkasan -->
+<div class="card">
 
-<div class="card fade-in">
+<h3>📊 Ringkasan Hari Ini</h3>
 
-<h3>
-📊 Ringkasan Hari Ini
-</h3>
+<div class="summary-row">
 
-<div class="prayer-row">
+<span>🕌 Sholat Aktif</span>
 
-<span>
-🕌 Sholat Aktif
-</span>
-
-<span id="currentPrayer">
--
-</span>
+<span id="activePrayer">-</span>
 
 </div>
 
-<div class="prayer-row">
+<div class="summary-row">
 
-<span>
-⏳ Sisa Waktu
-</span>
+<span>⏳ Sisa Waktu</span>
 
-<span id="remainingTime">
--
-</span>
+<span id="remainingTime">-</span>
 
 </div>
 
-<div class="prayer-row">
+<div class="summary-row">
 
-<span>
-📍 Arah Kiblat
-</span>
+<span>📍 Arah Kiblat</span>
 
-<span id="qibla">
-Memuat...
-</span>
+<span id="qiblaSummary">Memuat...</span>
 
 </div>
 
@@ -209,31 +158,25 @@ Memuat...
 
 </div>
 
-</div>
+</section>
 
-<!-- ===================================================
+<!-- ===========================
      HALAMAN KIBLAT
-=================================================== -->
+=========================== -->
 
-<!-- ===================================================
-     HALAMAN KIBLAT
-=================================================== -->
-
-<div id="page-qibla" class="page">
+<section id="page-qibla" class="page">
 
 <div class="container">
 
-<div class="prayer-header">
+<header class="hero">
 
-<h1>
-🧭 Arah Kiblat
-</h1>
+<h1>🧭 Arah Kiblat</h1>
 
 <p>
-Hadapkan perangkat ke arah utara untuk mendapatkan arah kiblat yang lebih akurat.
+Hadapkan bagian atas HP ke arah utara.
 </p>
 
-</div>
+</header>
 
 <div class="card">
 
@@ -255,97 +198,65 @@ Hadapkan perangkat ke arah utara untuk mendapatkan arah kiblat yang lebih akurat
 
 </p>
 
-<div class="prayer-row">
-
-<span>
-
-📡 Status GPS
-
-</span>
-
-<span id="gpsStatus">
-
-Mencari...
-
-</span>
-
-</div>
-
-<div class="prayer-row">
-
-<span>
-
-🧭 Arah Kiblat
-
-</span>
-
-<span id="qiblaDirection">
-
-0°
-
-</span>
-
-</div>
-
-<div class="prayer-row">
-
-<span>
-
-📍 Kota
-
-</span>
-
-<span id="qiblaCity">
-
--
-
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===================================================
-     HALAMAN JADWAL BULANAN
-=================================================== -->
-
-<div id="page-calendar" class="page">
-
-<div class="container">
-
-<div class="prayer-header">
-
-<h1>
-
-📅 Jadwal Sholat Bulanan
-
-</h1>
-
-<p>
-
-Jadwal otomatis sesuai lokasi GPS
-
-</p>
-
 </div>
 
 <div class="card">
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+<div class="info-row">
 
-<h3>
+<span>📍 Kota</span>
 
-Bulan Ini
+<b id="qiblaCity">-</b>
 
-</h3>
+</div>
 
-<button
-id="reloadSchedule"
-class="secondary-btn">
+<div class="info-row">
+
+<span>📡 GPS</span>
+
+<b id="gpsStatus">Aktif</b>
+
+</div>
+
+<div class="info-row">
+
+<span>🧭 Derajat Kiblat</span>
+
+<b id="qiblaDirection">0°</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+     HALAMAN JADWAL BULANAN
+=========================== -->
+
+<section id="page-calendar" class="page">
+
+<div class="container">
+
+<header class="hero">
+
+<h1>📅 Jadwal Bulanan</h1>
+
+<p>
+Jadwal berdasarkan lokasi GPS
+</p>
+
+</header>
+
+<div class="card">
+
+<div class="toolbar">
+
+<h3>Bulan Ini</h3>
+
+<button id="reloadSchedule">
 
 🔄 Muat Ulang
 
@@ -360,15 +271,10 @@ class="secondary-btn">
 <tr>
 
 <th>Tgl</th>
-
 <th>Subuh</th>
-
 <th>Zuhur</th>
-
 <th>Asar</th>
-
 <th>Magrib</th>
-
 <th>Isya</th>
 
 </tr>
@@ -395,57 +301,29 @@ Memuat jadwal...
 
 <div class="card">
 
-<h3>
+<h3>📍 Lokasi</h3>
 
-📍 Lokasi Jadwal
+<div class="info-row">
 
-</h3>
+<span>Kota</span>
 
-<div class="prayer-row">
-
-<span>
-
-Kota
-
-</span>
-
-<span id="monthlyCity">
-
--
-
-</span>
+<b id="monthlyCity">-</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
-<span>
+<span>Latitude</span>
 
-Latitude
-
-</span>
-
-<span id="monthlyLat">
-
--
-
-</span>
+<b id="monthlyLat">-</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
-<span>
+<span>Longitude</span>
 
-Longitude
-
-</span>
-
-<span id="monthlyLon">
-
--
-
-</span>
+<b id="monthlyLon">-</b>
 
 </div>
 
@@ -453,31 +331,23 @@ Longitude
 
 </div>
 
-</div>
+</section>
 
-<!-- ===================================================
+<!-- ===========================
      HALAMAN HIJRIAH
-=================================================== -->
+=========================== -->
 
-<!-- ===================================================
-     HALAMAN HIJRIAH
-=================================================== -->
-
-<div id="page-hijri" class="page">
+<section id="page-hijri" class="page">
 
 <div class="container">
 
-<div class="prayer-header">
+<header class="hero">
 
-<h1>
-🌙 Kalender Hijriah
-</h1>
+<h1>🌙 Kalender Hijriah</h1>
 
-<p>
-Tanggal Hijriah berdasarkan lokasi saat ini
-</p>
+<p>Informasi tanggal Hijriah hari ini</p>
 
-</div>
+</header>
 
 <div class="card hijri-card">
 
@@ -503,55 +373,51 @@ Memuat...
 
 <div class="card">
 
-<h3>
+<h3>📅 Hari Besar Islam</h3>
 
-📅 Hari Besar Islam
-
-</h3>
-
-<div class="prayer-row">
+<div class="info-row">
 
 <span>🌙 1 Ramadhan</span>
 
-<span>Puasa</span>
+<b>Awal Puasa</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
 <span>🎉 1 Syawal</span>
 
-<span>Idul Fitri</span>
+<b>Idul Fitri</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
 <span>🕋 10 Dzulhijjah</span>
 
-<span>Idul Adha</span>
+<b>Idul Adha</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
 <span>🌙 1 Muharram</span>
 
-<span>Tahun Baru Islam</span>
+<b>Tahun Baru Islam</b>
 
 </div>
 
-<div class="prayer-row">
+<div class="info-row">
 
 <span>✨ 12 Rabiul Awal</span>
 
-<span>Maulid Nabi ﷺ</span>
+<b>Maulid Nabi ﷺ</b>
 
 </div>
 
 </div>
 
-<div class="card hijri-calendar">
+<div class="card">
 
 <div class="calendar-header">
 
@@ -589,7 +455,7 @@ Kalender Hijriah
 
 <div id="hijriCalendar">
 
-Memuat kalender...
+Memuat Kalender...
 
 </div>
 
@@ -597,144 +463,55 @@ Memuat kalender...
 
 </div>
 
-</div>
+</section>
 
-<!-- ===================================================
+<!-- ===========================
      HALAMAN PENGATURAN
-=================================================== -->
+=========================== -->
 
-<div id="page-more" class="page">
+<section id="page-more" class="page">
 
 <div class="container">
 
-<div class="prayer-header">
+<header class="hero">
 
-<h1>
+<h1>⚙️ Pengaturan</h1>
 
-⚙️ Pengaturan
+<p>Sesuaikan aplikasi dengan kebutuhan Anda</p>
 
-</h1>
+</header>
 
-<p>
+<div class="card">
 
-Atur aplikasi sesuai kebutuhan
+<div class="info-row">
 
-</p>
+<span>🌙 Dark Mode</span>
 
-</div>
-
-<div class="setting-card">
-
-<div class="setting-item">
-
-<span>
-
-🌙 Mode Gelap
-
-</span>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="darkModeBtn">
-
-</label>
+<input type="checkbox" id="darkModeBtn">
 
 </div>
 
-<div class="setting-item">
+<div class="info-row">
 
-<span>
+<span>🔔 Notifikasi Adzan</span>
 
-🔔 Notifikasi Adzan
-
-</span>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="notificationSwitch"
-checked>
-
-</label>
+<input type="checkbox" id="notificationSwitch" checked>
 
 </div>
 
-<div class="setting-item">
+<div class="info-row">
 
-<span>
+<span>📍 Gunakan GPS</span>
 
-🔊 Pilih Suara Adzan
-
-</span>
-
-<select id="adhanSelect">
-
-<option value="makkah">
-
-Makkah
-
-</option>
-
-<option value="madinah">
-
-Madinah
-
-</option>
-
-<option value="indonesia">
-
-Indonesia
-
-</option>
-
-<option value="mishary">
-
-Mishary
-
-</option>
-
-</select>
+<input type="checkbox" id="gpsSwitch" checked>
 
 </div>
 
-<div class="setting-item">
+<div class="info-row">
 
-<span>
+<span>🔄 Refresh Otomatis</span>
 
-📍 Gunakan GPS
-
-</span>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="gpsSwitch"
-checked>
-
-</label>
-
-</div>
-
-<div class="setting-item">
-
-<span>
-
-🔄 Refresh Otomatis
-
-</span>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="autoRefresh"
-checked>
-
-</label>
+<input type="checkbox" id="autoRefresh" checked>
 
 </div>
 
@@ -742,111 +519,109 @@ checked>
 
 <div class="card">
 
-<h3>
+<h3>🔊 Pilih Suara Adzan</h3>
 
-ℹ️ Tentang Aplikasi
+<select id="adhanSelect">
 
-</h3>
+<option value="makkah">Makkah</option>
 
-<p>
+<option value="madinah">Madinah</option>
 
-Jadwal Sholat v2.0
+<option value="indonesia">Indonesia</option>
 
-</p>
+<option value="mishary">Mishary Rashid</option>
 
-<p>
+</select>
 
-Menggunakan GPS, API Aladhan, dan Capacitor.
+</div>
 
-</p>
+<div class="card">
 
-<p>
+<h3>ℹ️ Tentang Aplikasi</h3>
 
-Dibuat dengan ❤️ menggunakan HTML, CSS, JavaScript.
+<p><b>Jadwal Sholat v3.0</b></p>
 
-</p>
+<p>Menggunakan GPS dan API Aladhan.</p>
+
+<p>Dikembangkan dengan HTML, CSS, JavaScript dan Capacitor.</p>
 
 </div>
 
 </div>
 
-</div>
+</section>
 
-<!-- ===================================================
+<!-- ===========================
      BOTTOM NAVIGATION
-=================================================== -->
-
-<!-- ===================================================
-     BOTTOM NAVIGATION
-=================================================== -->
+=========================== -->
 
 <nav class="bottom-nav">
 
 <div class="nav-item active" id="nav-home">
 
-<div style="font-size:24px;">🏠</div>
+<div class="nav-icon">🏠</div>
 
-<small>Home</small>
+<span>Home</span>
 
 </div>
 
 <div class="nav-item" id="nav-qibla">
 
-<div style="font-size:24px;">🧭</div>
+<div class="nav-icon">🧭</div>
 
-<small>Kiblat</small>
+<span>Kiblat</span>
 
 </div>
 
 <div class="nav-item" id="nav-calendar">
 
-<div style="font-size:24px;">📅</div>
+<div class="nav-icon">📅</div>
 
-<small>Jadwal</small>
+<span>Jadwal</span>
 
 </div>
 
 <div class="nav-item" id="nav-hijri">
 
-<div style="font-size:24px;">🌙</div>
+<div class="nav-icon">🌙</div>
 
-<small>Hijriah</small>
+<span>Hijriah</span>
 
 </div>
 
 <div class="nav-item" id="nav-more">
 
-<div style="font-size:24px;">⚙️</div>
+<div class="nav-icon">⚙️</div>
 
-<small>Lainnya</small>
+<span>Lainnya</span>
 
 </div>
 
 </nav>
 
-<!-- ===================================================
-     LOADING
-=================================================== -->
+<!-- ===========================
+     LOADING SCREEN
+=========================== -->
 
-<div id="loadingScreen">
+<div id="loadingScreen" class="loading-screen">
 
-<div class="loading-box">
+<div class="loading-card">
 
 <div class="loading-spinner"></div>
 
 <h2>Memuat Jadwal Sholat...</h2>
 
-<p>Mengambil lokasi GPS dan jadwal terbaru</p>
+<p>Mohon tunggu sebentar...</p>
 
 </div>
 
 </div>
 
-<!-- ===================================================
-     TOAST MESSAGE
-=================================================== -->
+<!-- ===========================
+     TOAST
+=========================== -->
 
-<div id="toast">
+<div id="toast" class="toast">
 
 <span id="toastText">
 
@@ -856,9 +631,9 @@ Berhasil
 
 </div>
 
-<!-- ===================================================
+<!-- ===========================
      AUDIO ADZAN
-=================================================== -->
+=========================== -->
 
 <audio id="adhanAudio" preload="auto">
 
@@ -867,13 +642,11 @@ id="adhanSource"
 src="audio/makkah.mp3"
 type="audio/mpeg">
 
-Browser Anda tidak mendukung audio.
-
 </audio>
 
-<!-- ===================================================
-     SCRIPT
-=================================================== -->
+<!-- ===========================
+     JAVASCRIPT
+=========================== -->
 
 <script src="background.js"></script>
 
@@ -886,4 +659,3 @@ Browser Anda tidak mendukung audio.
 </body>
 
 </html>
-
