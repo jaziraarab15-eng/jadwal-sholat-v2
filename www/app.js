@@ -24,12 +24,16 @@ function setText(id, value) {
 }
 
 function showLoading(text = "Memuat Jadwal Sholat...") {
+
     const box = $("loadingOverlay");
     const label = $("loadingText");
 
-    if (label) label.textContent = text;
+    if (label) {
+        label.textContent = text;
+    }
 
     if (box) {
+        box.classList.remove("hidden");
         box.style.display = "flex";
     }
 
@@ -37,10 +41,15 @@ function showLoading(text = "Memuat Jadwal Sholat...") {
 }
 
 function hideLoading() {
+
     const box = $("loadingOverlay");
 
     if (box) {
-        box.style.display = "none";
+        box.classList.add("hidden");
+
+        setTimeout(() => {
+            box.style.display = "none";
+        }, 300);
     }
 
     App.loading = false;
@@ -54,6 +63,7 @@ async function getGPS() {
             reject("GPS tidak tersedia");
             return;
         }
+console.log("📍 Meminta izin GPS...");
 
         navigator.geolocation.getCurrentPosition(
 
@@ -67,6 +77,9 @@ async function getGPS() {
             },
 
             err => {
+
+console.error("❌ GPS gagal", err);
+
 
                 reject(err.message);
 
@@ -481,17 +494,25 @@ async function loadMonthlySchedule(){
         const url=
 `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${App.latitude}&longitude=${App.longitude}&method=11`;
 
-        const res=await fetch(url);
+        console.log("URL:", url);
 
-        const json=await res.json();
+try {
 
-        tbody.innerHTML="";
+    const res = await fetch(url);
 
-        json.data.forEach(day=>{
+    if(!res.ok){
+        throw new Error("Gagal mengambil jadwal bulanan");
+    }
 
-            const t=day.timings;
+    const json = await res.json();
 
-            tbody.insertAdjacentHTML("beforeend",`
+    tbody.innerHTML = "";
+
+    json.data.forEach(day => {
+
+        const t = day.timings;
+
+        tbody.insertAdjacentHTML("beforeend",`
 
 <tr>
 
@@ -511,13 +532,16 @@ async function loadMonthlySchedule(){
 
 `);
 
-        });
+    });
 
-    }catch(err){
+} catch(err){
 
-        console.error(err);
+    console.error("Jadwal bulanan gagal:", err);
 
-    }
+    tbody.innerHTML =
+    "<tr><td colspan='6'>Jadwal bulanan belum tersedia</td></tr>";
+
+}
 
 }
 
@@ -559,8 +583,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     try{
 
-        showLoading("Memuat Jadwal Sholat...");
-
         initNavigation();
 
         initDarkMode();
@@ -569,25 +591,35 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
         await loadPrayerTimes();
 
-        startCountdown();
+hideLoading();   // <-- pindahkan ke sini
 
-        updateActivePrayer();
+startCountdown();
 
-        initCompass();
+updateActivePrayer();
 
-        await loadMonthlySchedule();
+initCompass();
 
-        setInterval(updateActivePrayer,60000);
+// Jangan tunggu jadwal bulanan
 
-        hideLoading();
+loadMonthlySchedule();
+
+setInterval(updateActivePrayer,60000);
 
         console.log("✅ Jadwal Sholat v4.0 siap digunakan");
 
-    }catch(err){
+catch(err){
 
-        console.error(err);
+    console.error("FULL ERROR:", err);
 
-        hideLoading();
+    alert(
+        "Nama : " + err.name +
+        "\nPesan : " + err.message +
+        "\nStack : " + (err.stack || "-")
+    );
+
+    hideLoading();
+
+}
 
         alert("Gagal memulai aplikasi\n"+err.message);
 
