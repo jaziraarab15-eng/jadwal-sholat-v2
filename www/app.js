@@ -1300,53 +1300,64 @@ function initDarkMode(){
    AUDIO ADZAN
 ========================================================== */
 
+function playAdhan(){
+
+    const audio =
+        document.getElementById(
+            "adhanAudio"
+        );
+
+    if(audio){
+
+        audio.currentTime=0;
+
+        audio.play().catch(()=>{});
+
+    }
+
+}
+
 function initAdhanSelector(){
 
-    const select=
+    const select =
+        document.getElementById(
+            "adhanSelect"
+        );
 
-    $("adhanSelect");
+    if(!select) return;
 
-    const audio=
-
-    $("adhanAudio");
-
-    if(!select||!audio) return;
-
-    const saved=
-
-    localStorage.getItem("adhan");
+    const saved =
+        localStorage.getItem(
+            "adhanVoice"
+        );
 
     if(saved){
 
         select.value=saved;
 
+        changeAdhanSource(saved);
+
     }
-
-    audio.src=
-
-    "audio/"+select.value+".mp3";
 
     select.onchange=()=>{
 
-        audio.src=
-
-        "audio/"+
-
-        select.value+
-
-        ".mp3";
-
         localStorage.setItem(
 
-            "adhan",
+            "adhanVoice",
 
             select.value
 
         );
 
-        toast(
+        changeAdhanSource(
 
-        "Suara adzan diganti"
+            select.value
+
+        );
+
+        showToast(
+
+            "Suara adzan diperbarui"
 
         );
 
@@ -1354,8 +1365,65 @@ function initAdhanSelector(){
 
 }
 
+function changeAdhanSource(name){
+
+    const source =
+        document.getElementById(
+            "adhanSource"
+        );
+
+    if(!source) return;
+
+    source.src=
+        "audio/"+name+".mp3";
+
+    document
+        .getElementById("adhanAudio")
+        .load();
+
+}
+
 /* ==========================================================
-   START FITUR
+   AUTO REFRESH
+========================================================== */
+
+function initAutoRefresh(){
+
+    setInterval(()=>{
+
+        if(currentLatitude){
+
+            loadPrayerTimes();
+
+        }
+
+    },300000);
+
+}
+
+/* ==========================================================
+   RELOAD BUTTON
+========================================================== */
+
+const reload =
+document.getElementById(
+"reloadSchedule"
+);
+
+if(reload){
+
+reload.onclick=()=>{
+
+showLoading(true);
+
+loadPrayerTimes();
+
+};
+
+}
+
+/* ==========================================================
+   START APPLICATION
 ========================================================== */
 
 document.addEventListener(
@@ -1364,121 +1432,44 @@ document.addEventListener(
 
 ()=>{
 
-const wait=setInterval(()=>{
+initNavigation();
 
-if(App.prayerTimes){
-
-clearInterval(wait);
-
-initQibla();
-
-renderHijriCalendar();
-
-initDarkMode();
+initSettings();
 
 initAdhanSelector();
 
+initAutoRefresh();
+
+if(currentLatitude){
+
+calculateQibla(
+
+currentLatitude,
+
+currentLongitude
+
+);
+
 }
 
-},500);
+if(hijriData){
 
-});
+renderHijriCalendar();
+
+}
+
+showPage("page-home");
+
+}
+
+);
 
 /* ==========================================================
-   FINAL STARTUP & AUTO REFRESH
+   END OF FILE
 ========================================================== */
 
-function updateTodaySummary(){
+console.log(
 
-    if(!$("activePrayer") || !$("remainingTime")) return;
+"🕌 Jadwal Sholat v3.0 Loaded"
 
-    $("activePrayer").textContent =
-        $("nextPrayer") ? $("nextPrayer").textContent : "-";
-
-    $("remainingTime").textContent =
-        $("countdown") ? $("countdown").textContent : "-";
-
-    if($("qiblaSummary")){
-
-        $("qiblaSummary").textContent =
-            Math.round(App.qibla || 0) + "°";
-
-    }
-
-}
-
-function playAdhan(){
-
-    const audio = $("adhanAudio");
-
-    if(!audio) return;
-
-    audio.currentTime = 0;
-
-    audio.play().catch(()=>{
-
-        console.log("Audio belum diizinkan browser");
-
-    });
-
-}
-
-function checkPrayerAlarm(){
-
-    if(!App.prayerTimes) return;
-
-    const now = new Date();
-
-    const current =
-        pad(now.getHours()) + ":" +
-        pad(now.getMinutes());
-
-    const list = [
-
-        App.prayerTimes.Fajr.substring(0,5),
-
-        App.prayerTimes.Dhuhr.substring(0,5),
-
-        App.prayerTimes.Asr.substring(0,5),
-
-        App.prayerTimes.Maghrib.substring(0,5),
-
-        App.prayerTimes.Isha.substring(0,5)
-
-    ];
-
-    if(list.includes(current)){
-
-        playAdhan();
-
-    }
-
-}
-
-function autoRefresh(){
-
-    updateTodaySummary();
-
-    checkPrayerAlarm();
-
-}
-
-setInterval(autoRefresh,1000);
-
-/* ==========================================================
-   START APP
-========================================================== */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-    showPage("page-home");
-
-    setTimeout(()=>{
-
-        hideLoading();
-
-    },1000);
-
-    toast("Jadwal Sholat v3.0 siap");
-
-});
+);
