@@ -107,50 +107,39 @@ async function loadPrayerTimes() {
 
     try {
 
-        showLoading("Mengambil lokasi GPS...");
+showLoading("Mengambil lokasi GPS...");
 
-        await getGPS();
+alert("STEP 1");
+await getGPS();
 
-        setText(
-            "locationName",
-            `${App.latitude.toFixed(5)}, ${App.longitude.toFixed(5)}`
-        );
+alert("STEP 2");
 
-        showLoading("Mengambil jadwal sholat...");
+setText(
+    "locationName",
+    `${App.latitude.toFixed(5)}, ${App.longitude.toFixed(5)}`
+);
 
-        const today = new Date();
+alert("STEP 3");
 
-        const day = today.getDate();
-        const month = today.getMonth() + 1;
-        const year = today.getFullYear();
+const res = await fetch(url);
 
-        const url =
-            `https://api.aladhan.com/v1/timings/${day}-${month}-${year}` +
-            `?latitude=${App.latitude}` +
-            `&longitude=${App.longitude}` +
-            `&method=11`;
+alert("STEP 4");
 
-        const res = await fetch(url);
+const json = await res.json();
 
-        const json = await res.json();
+alert("STEP 5");
 
-        if (json.code !== 200) {
-            throw new Error("Gagal mengambil jadwal");
-        }
+App.prayerTimes = json.data.timings;
 
-        App.prayerTimes = json.data.timings;
-        App.hijriData = json.data.date.hijri;
+alert("STEP 6");
 
-        renderTodayPrayer();
-        renderHijriInfo();
+renderTodayPrayer();
+renderHijriInfo();
 
-        hideLoading();
+hideLoading();
 
-    } catch (err) {
+alert("STEP 7");
 
-        console.error(err);
-
-        hideLoading();
 
         alert("Gagal memuat jadwal sholat.\n" + err.message);
 
@@ -498,8 +487,9 @@ async function loadMonthlySchedule(){
 
 try {
 
+console.log("STEP 3");
     const res = await fetch(url);
-
+console.log("STEP 4");
     if(!res.ok){
         throw new Error("Gagal mengambil jadwal bulanan");
     }
@@ -579,9 +569,9 @@ function initDarkMode(){
    START APP
 ========================================================== */
 
-document.addEventListener("DOMContentLoaded",async()=>{
+document.addEventListener("DOMContentLoaded", async () => {
 
-    try{
+    try {
 
         initNavigation();
 
@@ -591,37 +581,31 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
         await loadPrayerTimes();
 
-hideLoading();   // <-- pindahkan ke sini
+        hideLoading();
 
-startCountdown();
+        startCountdown();
 
-updateActivePrayer();
+        updateActivePrayer();
 
-initCompass();
+        initCompass();
 
-// Jangan tunggu jadwal bulanan
+        loadMonthlySchedule(); // jangan di-await
 
-loadMonthlySchedule();
-
-setInterval(updateActivePrayer,60000);
+        setInterval(updateActivePrayer, 60000);
 
         console.log("✅ Jadwal Sholat v4.0 siap digunakan");
 
-catch(err){
+    } catch (err) {
 
-    console.error("FULL ERROR:", err);
+        console.error("FULL ERROR:", err);
 
-    alert(
-        "Nama : " + err.name +
-        "\nPesan : " + err.message +
-        "\nStack : " + (err.stack || "-")
-    );
+        hideLoading();
 
-    hideLoading();
-
-}
-
-        alert("Gagal memulai aplikasi\n"+err.message);
+        alert(
+            "Gagal memulai aplikasi\n\n" +
+            err.name + "\n" +
+            err.message
+        );
 
     }
 
